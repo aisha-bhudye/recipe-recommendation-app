@@ -5,5 +5,5 @@ block content
   .album.py-5.bg-light
     .container
       .row
-        each recipe in recipes
-          +thumbCard(recipe)
+        each user in users
+          +thumbCard(user)

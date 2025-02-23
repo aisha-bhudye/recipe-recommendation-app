@@ -1,18 +1,33 @@
 {
   "name": "logrocket-pug-example",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+  "engines": {
+    "node": ">=v16.15.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "devstart": "nodemon ./bin/www",
+    "serverstart": "DEBUG=express-locallibrary-tutorial:* npm run devstart"
+  },
   "dependencies": {
-    "axios": "^0.19.2",
-    "express": "^4.17.1",
-    "pug": "^2.0.4"
+    "axios": "^1.7.9",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "debug": "^4.3.5",
+    "express": "^4.21.0",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.3.0",
+    "express-validator": "^7.1.0",
+    "helmet": "^7.1.0",
+    "http-errors": "^2.0.0",
+    "luxon": "^3.4.4",
+    "mongoose": "^8.8.3",
+    "morgan": "^1.10.0",
+    "numeral": "^2.0.6",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.3"
   }
 }
