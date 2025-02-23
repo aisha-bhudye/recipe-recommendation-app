@@ -6,7 +6,7 @@ const IngredientQuantitySchema = new Schema({
   unit: {
     type: String,
     required: true,
-    enum: ["tablespoon", "teaspoon", "gramme", "millilitre", "cup"],
+    enum: ["tablespoon", "teaspoon", "gramme", "millilitre", "cup", "piece"],
     default: "gramme",
   },
   quantity: { type: mongoose.Types.Decimal128, required: true},

@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 console.log(
-    'This script populates some test recipes to your database. Specified database as argument - e.g.: node populate-recipe-db "mongodb+srv://dbUser:t6o78zpgIXXgtfcs@cluster-play.hg7k5.mongodb.net/meals?retryWrites=true&w=majority&appName=Cluster-Play"'
+    'This script populates some test recipes to your database. Specified database as argument - e.g.: node populate-recipe-db "mongodb+srv://dbUser:kXVops04jV8MTI3s@cluster-meal-recommenda.fjbrt.mongodb.net/recipes?retryWrites=true&w=majority&appName=Cluster-Meal-Recommendation"'
 ); //TODO: Update this prompt
 
 // Get arguments passed on command line
@@ -107,8 +107,8 @@ async function createRecipe(indexParam, nameParam, descriptionParam, ingredients
         steps: stepsParam,
         serves: servesParam,
         preparationTime: preparationTimeParam,
-        origin: originParam, 
-		owners: ownerParam
+        origin: originParam,
+        owners: ownerParam
     }
     const recipe = new Recipe(recipeObject);
     await recipe.save();
@@ -120,23 +120,39 @@ async function createRecipe(indexParam, nameParam, descriptionParam, ingredients
 async function createListOfIngredients() {
     console.log("Adding ingredients");
     await Promise.all([
-        createIngredient(0, "Salt", "Chemical", ),
+        createIngredient(0, "Salt", "Chemical",),
         createIngredient(1, "Briani mix", "Spice"),
         createIngredient(2, "Onion", "Allium"),
         createIngredient(3, "Plain Yoghurt", "Dairy"),
         createIngredient(4, "Chicken", "Bird"),
         createIngredient(5, "Potato", "Carbohydrate"),
         createIngredient(6, "Rice", "Carbohydrate"),
+        createIngredient(7, "Chickpeas", "Carbohydrate"),
+        createIngredient(8, "Avocado", "Fruit"),
+        createIngredient(9, "Red Onion", "Vegetable"),
+        createIngredient(10, "Cucumber", "Vegetable"),
+        createIngredient(11, "Olive Oil", "Oil"),
+        createIngredient(12, "Lemon", "Fruit"),
+        createIngredient(13, "Salt", "Chemical"),
+        createIngredient(14, "Pepper", "Chemical"),
+        createIngredient(15, "Sweet Potato", "Vegetable"),
+        createIngredient(16, "Black Beans", "Vegetable"),
+        createIngredient(17, "Chili Powder", "Vegetable"),
+        createIngredient(18, "Cumin", "Spice"),
+        createIngredient(19, "Olive Oil", "Oil"),
+        createIngredient(20, "Tortillas", "Carbohydrate"),
+        createIngredient(21, "Avocado&Salsa for Topping", "Vegetable")
     ]);
-    
+
 }
 
 async function createListOfOwners() {
     console.log("Adding owners");
     await Promise.all([
-        createOwner(0,"Aisha", "Bhudye", "01/01/2003", "Aisha was born in Newham to African Asian parents")
+        createOwner(0, "Aisha", "Bhudye", "01/01/2003", "Aisha was born in Newham to African Asian parents"),
+        createOwner(1, "Alexis", "Xavier", "02/02/2003", "Alexis was born to parents from lovely Portugal")
     ]);
-    
+
 }
 
 async function createListOfIngredientQuantities() {
@@ -149,8 +165,23 @@ async function createListOfIngredientQuantities() {
         createIngredientQuantity(4, 'gramme', 2000.0, ingredients[4]),
         createIngredientQuantity(5, 'gramme', 2000.0, ingredients[5]),
         createIngredientQuantity(6, 'gramme', 2000.0, ingredients[6]),
+        createIngredientQuantity(7, 'gramme', 240, ingredients[7]),
+        createIngredientQuantity(8, 'gramme', 150, ingredients[8]),
+        createIngredientQuantity(9, 'gramme', 70, ingredients[9]),
+        createIngredientQuantity(10, 'gramme', 100, ingredients[10]),
+        createIngredientQuantity(11, 'gramme', 15, ingredients[11]),
+        createIngredientQuantity(12, 'gramme', 50, ingredients[12]),
+        createIngredientQuantity(13, 'gramme', 2, ingredients[13]),
+        createIngredientQuantity(14, 'gramme', 2, ingredients[14]),
+        createIngredientQuantity(15, 'gramme', 250, ingredients[15]),
+        createIngredientQuantity(16, 'gramme', 170, ingredients[16]),
+        createIngredientQuantity(17, 'tablespoon', 1, ingredients[17]),
+        createIngredientQuantity(18, 'tablespoon', 1, ingredients[18]),
+        createIngredientQuantity(19, 'tablespoon', 1, ingredients[19]),
+        createIngredientQuantity(20, 'piece', 1, ingredients[20]),
+        createIngredientQuantity(21, 'gramme', 50, ingredients[21]),
     ]);
-    
+
 }
 
 async function createListOfRecipes() {
@@ -171,8 +202,11 @@ async function createListOfRecipes() {
         "Add the fried potatoes and the fried onions to the mix",
         "Bring to boil and then allow to simmer for about 30 mins, adding water to bring the broth to a consistency to your taste"
     ]
+    const kaliaRecipeOwners = [
+        owners[0]
+    ]
     await Promise.all([
-        createRecipe(0,"Kalia", "This is an Asian broth that is typically made using chicken or beef", kaliaIngredientQuantities, kaliaSteps, 5, 60, "Indian", owners)
+        createRecipe(0, "Kalia", "This is an Asian broth that is typically made using chicken or beef", kaliaIngredientQuantities, kaliaSteps, 5, 60, "Indian", kaliaRecipeOwners)
     ]);
 
 
@@ -194,9 +228,62 @@ async function createListOfRecipes() {
         "Seal the recipient with aluminium foil underneath its cover",
         "Cook on highest fire for 10 mins and then on low fire for another 40 mins"
     ]
+    const brianiRecipeOwners = [
+        owners[0]
+    ]
     await Promise.all([
-        createRecipe(1,"Briani", "This is an Asian rice mix with potato, typically made using chicken or beef", brianiIngredientQuantities, brianiSteps, 5, 60, "Indian", owners)
+        createRecipe(1, "Briani", "This is an Asian rice mix with potato, typically made using chicken or beef", brianiIngredientQuantities, brianiSteps, 5, 60, "Indian", brianiRecipeOwners)
     ]);
 
+    //Start Recipe 3
+    const chickpeaAndAvocadoSalad = [
+        ingredientQuantities[7],
+        ingredientQuantities[8],
+        ingredientQuantities[9],
+        ingredientQuantities[10],
+        ingredientQuantities[11],
+        ingredientQuantities[12],
+        ingredientQuantities[13],
+        ingredientQuantities[14],
+    ]
+    const chickpeaAndAvocadoSaladSteps = [
+        "Mash the avocado in a bowl.",
+        "Add the chickpeas, onion, and cucumber",
+        "Drizzle with olive oil and lemon juice.",
+        "Season with salt & pepper.",
+        "Mix well and serve chilled"
+    ]
+
+    const chickpeaAndAvocadoSaladRecipeOwners = [
+        owners[0]
+    ]
+    await Promise.all([
+        createRecipe(2, "ChickPea&AvocadoSalad", "A delicious healthy salad", chickpeaAndAvocadoSalad, chickpeaAndAvocadoSaladSteps, 5, 30, "British", chickpeaAndAvocadoSaladRecipeOwners)
+    ]);
+
+    //End Recipe 3
+
+
+    //Start Recipe 4
+    const sweetPotatoandBlackBeanTacos = [
+        ingredientQuantities[15],
+        ingredientQuantities[16],
+        ingredientQuantities[17],
+        ingredientQuantities[18],
+        ingredientQuantities[19],
+        ingredientQuantities[20],
+        ingredientQuantities[21],
+    ]
+    const sweetPotatoandBlackBeanTacosSteps = [
+        "Roast sweet potato cubes at 200°C (400°F) for 20 minutes.",
+        "Heat black beans with chili powder and cumin",
+        "Assemble tacos with sweet potato, beans, avocado, and salsa"
+    ]
+    const sweetPotatoandBlackBeanTacosRecipeOwners = [
+        owners[0]
+    ]
+    await Promise.all([
+        createRecipe(3, "sweetPotatoandBlackBeanTacos", "A delicious healthy taco", sweetPotatoandBlackBeanTacos, sweetPotatoandBlackBeanTacosSteps, 5, 30, "British", sweetPotatoandBlackBeanTacosRecipeOwners)
+    ]);
 
 }

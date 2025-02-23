@@ -15,7 +15,7 @@ const ingredient = require("./models/ingredient");
 mongoose.set("strictQuery", false);
 
 const dev_db_url =
-	"mongodb+srv://dbUser:t6o78zpgIXXgtfcs@cluster-play.hg7k5.mongodb.net/recipes?retryWrites=true&w=majority&appName=Cluster-Play";
+	"mongodb+srv://dbUser:kXVops04jV8MTI3s@cluster-meal-recommenda.fjbrt.mongodb.net/recipes?retryWrites=true&w=majority&appName=Cluster-Meal-Recommendation";
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 const numeral = require('numeral');
