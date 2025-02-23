@@ -2,8 +2,8 @@ extends layout.pug
 include mixins/_thumbCard
 
 block content
-  .album.py-5.bg-light
-    .container
-      .row
-        each recipe in recipes
-          +thumbCard(recipe)
+	.album.py-5.bg-light
+		.container
+			.row
+				each recipe in recipes
+					+thumbCard(recipe)

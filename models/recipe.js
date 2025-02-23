@@ -15,12 +15,15 @@ const RecipeSchema = new Schema({
         required: true,
         enum: ["British", "Indian", "Persian", "African", "Latino", "Chinese", "Japanese", "Italian", "French", "Mediterranean" ],
         default: "British",
-      }
+      },
+	owners: [{ type: Schema.ObjectId, ref: "Owner", required: true }]
 });
+
+RecipeSchema.set('timestamps', true);
 
 // Virtual for this recipe object's URL.
 RecipeSchema.virtual("url").get(function () {
-    return "/catalog/recipe/" + this._id;
+    return "/recipe/" + this._id;
 });
 
 

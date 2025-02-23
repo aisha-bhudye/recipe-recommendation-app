@@ -1,0 +1,45 @@
+extends layout.pug
+
+block content
+	- const formattedUpdatedAt = moment(recipe.updatedAt).format('DD/MMM/yyyy HH:mm:ss')
+	- const owners = recipe.owners
+	- const ingredientQuantities = recipe.ingredients 
+	- const recipeSteps = recipe.steps
+	- const imagePath = `/images/${recipe.name}.png`
+	.container
+		.row 
+			img(src=imagePath, alt=recipe.name)&attributes({"max-width": "100%"}, {"height": "auto"}, {"focusable": "false"})
+			p
+		.row
+			.col-md-8
+				h2 #{recipe.name}	
+				p
+					| Updated at #{formattedUpdatedAt} by recipe owner(s)
+					ul
+						if owners.length
+							each owner in owners
+								li #{owner.fullName}
+				hr
+				h3 Ingredients
+				p
+					| You will need the following ingredients:
+				ol
+					if ingredientQuantities.length 
+						each ingredientQuantity in ingredientQuantities
+							- const ingredient= ingredientQuantity.ingredient
+								li #{ingredientQuantity.quantity} #{ingredientQuantity.unit}(s) of #{ingredient.name} 
+
+				
+				h3 Steps
+				p
+					| You will need to follow the following steps:
+				ol
+					if recipeSteps.length 
+						each step in recipeSteps
+							li #{step}
+
+			.col-md-4
+				.p-4.mb-3.bg-light.rounded
+					h4 About this recipe
+					p
+						| #{recipe.description}

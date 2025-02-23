@@ -18,6 +18,7 @@ const ingredientQuantities = [];
 const recipes = [];
 
 const mongoose = require("mongoose");
+const owner = require("../models/owner");
 mongoose.set("strictQuery", false);
 
 const mongoDB = userArgs[0];
@@ -98,7 +99,7 @@ async function createIngredientQuantity(indexParam, unitParam, quantityParam, in
 
 }
 
-async function createRecipe(indexParam, nameParam, descriptionParam, ingredientsParam, stepsParam, servesParam, preparationTimeParam, originParam) {
+async function createRecipe(indexParam, nameParam, descriptionParam, ingredientsParam, stepsParam, servesParam, preparationTimeParam, originParam, ownerParam) {
     const recipeObject = {
         name: nameParam,
         description: descriptionParam,
@@ -106,7 +107,8 @@ async function createRecipe(indexParam, nameParam, descriptionParam, ingredients
         steps: stepsParam,
         serves: servesParam,
         preparationTime: preparationTimeParam,
-        origin: originParam
+        origin: originParam, 
+		owners: ownerParam
     }
     const recipe = new Recipe(recipeObject);
     await recipe.save();
@@ -170,7 +172,7 @@ async function createListOfRecipes() {
         "Bring to boil and then allow to simmer for about 30 mins, adding water to bring the broth to a consistency to your taste"
     ]
     await Promise.all([
-        createRecipe(0,"Kalia", "This is an Asian broth that is typically made using chicken or beef", kaliaIngredientQuantities, kaliaSteps, 5, 60, "Indian")
+        createRecipe(0,"Kalia", "This is an Asian broth that is typically made using chicken or beef", kaliaIngredientQuantities, kaliaSteps, 5, 60, "Indian", owners)
     ]);
 
 
@@ -193,7 +195,7 @@ async function createListOfRecipes() {
         "Cook on highest fire for 10 mins and then on low fire for another 40 mins"
     ]
     await Promise.all([
-        createRecipe(1,"Briani", "This is an Asian rice mix with potato, typically made using chicken or beef", brianiIngredientQuantities, brianiSteps, 5, 60, "Indian")
+        createRecipe(1,"Briani", "This is an Asian rice mix with potato, typically made using chicken or beef", brianiIngredientQuantities, brianiSteps, 5, 60, "Indian", owners)
     ]);
 
 

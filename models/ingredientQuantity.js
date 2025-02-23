@@ -15,7 +15,7 @@ const IngredientQuantitySchema = new Schema({
 
 // Virtual for this book instance URL.
 IngredientQuantitySchema.virtual("url").get(function () {
-  return "/catalog/ingredientQuantity/" + this._id;
+  return "/ingredientQuantity/" + this._id;
 });
 
 IngredientQuantitySchema.virtual("ingredientstep").get(function () {

@@ -14,7 +14,7 @@ const IngredientSchema = new Schema({
 
 // Virtual for this ingredient instance URL.
 IngredientSchema.virtual("url").get(function () {
-  return "/catalog/ingredient/" + this._id;
+  return "/ingredient/" + this._id;
 });
 
 // Export model.

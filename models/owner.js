@@ -17,7 +17,7 @@ OwnerSchema.virtual("fullName").get(function () {
 
 // Virtual for this owner instance URL.
 OwnerSchema.virtual("url").get(function () {
-  return "/catalog/owner/" + this._id;
+  return "/owner/" + this._id;
 });
 
 
