@@ -142,9 +142,7 @@ async function createListOfIngredients() {
         createIngredient(19, "Olive Oil", "Oil"),
         createIngredient(20, "Tortillas", "Carbohydrate"),
         createIngredient(21, "Avocado&Salsa for Topping", "Vegetable"),
-        createIngredient(22, "Pasta", "Carbohydrate"),
-        createIngredient(23, "Pesto", "Sauce"),
-        createIngredient(24, "Parmesan Cheese", "Diary")
+
 
 
     ]);
@@ -186,11 +184,6 @@ async function createListOfIngredientQuantities() {
         createIngredientQuantity(20, 'piece', 1, ingredients[20]),
         createIngredientQuantity(21, 'gramme', 50, ingredients[21]),
 
-        createIngredientQuantity(22, 'tablespoon', 2, ingredients[22]),
-        createIngredientQuantity(23, 'gramme', 450, ingredients[23]),
-        createIngredientQuantity(24, 'cup', 0.5, ingredients[24]),
-        createIngredientQuantity(25, 'tablespoon', 2.5, ingredients[25]),
-        createIngredientQuantity(26, 'teaspoon', 0.5, ingredients[26]),
     ]);
 
 }
@@ -296,29 +289,7 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(3, "sweetPotatoandBlackBeanTacos", "A delicious healthy taco", sweetPotatoandBlackBeanTacos, sweetPotatoandBlackBeanTacosSteps, 5, 30, "British", sweetPotatoandBlackBeanTacosRecipeOwners)
     ]);
-// Start recipe 5 - Alexis//
 
-    const PestoAndPasta = [
-        ingredientQuantities[22],
-        ingredientQuantities[23],
-        ingredientQuantities[24],
-        ingredientQuantities[25],
-        ingredientQuantities[26],
-    ]
-
-    const PestoAndPastaSteps = [
-        "Boil pasta in salted water until soft; and then drain.",
-        "Sauté chopped onion in olive oil until translucent.",
-        "Stir in pesto sauce, salt, and pepper.",
-        "Toss pasta with the pesto mixture until evenly coated.",
-        "Sprinkle with grated Parmesan cheese and serve."
-    ]
-    const PestoAndPastaRecipeOwner = [
-        owners[1]
-    ]
-    await Promise.all([
-        createRecipe(4, "PestoAndPasta", "A beautiful pesto dish", PestoAndPasta, PestoAndPastaSteps, 8, 15, "Italian", PestoAndPastaRecipeOwner)
-    ]);
 
 
 }
