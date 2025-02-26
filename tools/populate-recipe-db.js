@@ -144,7 +144,14 @@ async function createListOfIngredients() {
         createIngredient(21, "Avocado&Salsa for Topping", "Vegetable"),
         createIngredient(22, "Pasta", "Carbohydrate"),
         createIngredient(23, "Pesto", "Sauce"),
-        createIngredient(24, "Parmesan Cheese", "Dairy")
+        createIngredient(24, "Parmesan Cheese", "Dairy"),
+
+        createIngredient(25, "Salmon", "Fish" ),
+        createIngredient(26, "Honey", "Sauce"),
+        createIngredient(27, "Soy Sauce", "Sauce"),
+        createIngredient(28, "Chilli Flakes", "Chemical"),
+        createIngredient(29, "Broccoli", "Vegetable"),
+        createIngredient(30, "Garlic", "Vegetable")
 
 
 
@@ -194,6 +201,14 @@ async function createListOfIngredientQuantities() {
         createIngredientQuantity(26, 'tablespoon', 2.5, ingredients[23]),//pesto
         createIngredientQuantity(27, 'teaspoon', 0.5, ingredients[0]),//salt
         createIngredientQuantity(28, 'tablespoon', 2, ingredients[14]),//pepper
+        //salmon Honey//
+        createIngredientQuantity(29, 'gramme', 250, ingredients[25]),//salmon
+        createIngredientQuantity(30, 'tablespoon', 2, ingredients[26]),//honey
+        createIngredientQuantity(31, 'tablespoon', 1, ingredients[27]),//soy sauce
+        createIngredientQuantity(32, 'tablespoon', 1, ingredients[30]),//garlic
+        createIngredientQuantity(33, 'teaspoon', 1, ingredients[28]),//chilli flakes
+        createIngredientQuantity(34, 'gramme', 200, ingredients[6]),//rice
+        createIngredientQuantity(35, 'gramme', 15, ingredients[29]),//Broccoli
 
     ]);
 
@@ -325,5 +340,33 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(4, "PestoAndPasta", "A beautiful pesto dish", PestoAndPasta, PestoAndPastaSteps, 8, 15, "Italian", PestoAndPastaRecipeOwner)
     ]);
+
+    const SpicyHoneySalmonRice = [
+        ingredientQuantities[29],
+        ingredientQuantities[30],
+        ingredientQuantities[31],
+        ingredientQuantities[32],
+        ingredientQuantities[33],
+        ingredientQuantities[34],
+        ingredientQuantities[35],
+
+    ]
+
+    const SpicyHoneySalmonRiceSteps = [
+        "Preheat oven to 200°C (400°F).",
+        "Mix honey, soy sauce, chili flakes, and minced garlic in a bowl.",
+        "Place salmon fillets on a baking tray and drizzle with the honey mixture.",
+        "Bake salmon for 12-15 minutes until it flakes easily with a fork.",
+        "Steam broccoli until tender and cook rice according to package instructions.",
+        "Serve salmon with rice and steamed broccoli."
+    ];
+    
+    const SpicyHoneySalmonRiceRecipeOwner = [
+        owners[1]
+    ]
+    await Promise.all([
+        createRecipe(5, "SpicyHoneySalmonRice", "A sweet and spicy twist", SpicyHoneySalmonRice, SpicyHoneySalmonRiceSteps, 2, 45, "Chinese", SpicyHoneySalmonRiceRecipeOwner)
+    ]);
+
 
 }
