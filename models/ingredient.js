@@ -7,7 +7,7 @@ const IngredientSchema = new Schema({
   class: {
     type: String,
     required: true,
-    enum: ["Spice", "Allium", "Vegetable", "Dairy", "Fat", "Fruit", "Gluten", "Carbohydrate", "Chemical", "Fish", "Mammal", "Bird", "Oil"],
+    enum: ["Spice", "Allium", "Vegetable", "Dairy", "Fat", "Fruit", "Gluten", "Carbohydrate", "Chemical", "Fish", "Mammal", "Bird", "Oil", "Sauce"],
     default: "Mammal",
   }
 });
