@@ -161,6 +161,13 @@ async function createListOfIngredients() {
         createIngredient(36, "Kiwi", "Fruit"),
         createIngredient(37, "Pomegranate", "Fruit"),
 
+        //shrimp rice//
+        createIngredient(38, "Shrimp", "Fish"),
+        createIngredient(39, "Butter", "Dairy"),
+        createIngredient(40, "Garlic", "Vegetable"),
+        createIngredient(41, "Lemon Juice", "Sauce"),
+        createIngredient(42, "Spring Onion", "Vegetable"),
+        createIngredient(43, "Paprika", "Chemical"),
 
 
 
@@ -227,7 +234,17 @@ async function createListOfIngredientQuantities() {
         createIngredientQuantity(41, 'cup', 1, ingredients[36]),//kiwi
         createIngredientQuantity(42, 'cup', 1, ingredients[37]),//Pomegranate
         createIngredientQuantity(43, 'tablespoon', 1, ingredients[26]),//honey
-
+        // Shrimp rice//
+        createIngredientQuantity(44, 'gramme', 200, ingredients[38]),//Shrimp
+        createIngredientQuantity(45, 'tablespoon',2, ingredients[39]),//Butter
+        createIngredientQuantity(46, 'tablespoon', 1, ingredients[30]),//Garlic
+        createIngredientQuantity(47, 'teaspoon', 1, ingredients[43]),//Paprika
+        createIngredientQuantity(48, 'teaspoon', 1, ingredients[28]),//ChilliFlakes
+        createIngredientQuantity(49, 'cup', 1, ingredients[6]),//Rice
+        createIngredientQuantity(50, 'cup', 1, ingredients[32]),//Lemon
+        createIngredientQuantity(51, 'gramme', 25, ingredients[42]),//Spring Onion
+        createIngredientQuantity(52, 'teaspoon', 0.5, ingredients[0]),//Salt
+        createIngredientQuantity(53, 'teaspoon', 0.5, ingredients[14]),//pepper
 
     ]);
 
@@ -418,5 +435,35 @@ async function createListOfRecipes() {
     ]);
     //end
 
+    //start//
+    const GarlicButterShrimp = [
+        ingredientQuantities[44],
+        ingredientQuantities[45],
+        ingredientQuantities[46],
+        ingredientQuantities[47],
+        ingredientQuantities[48],
+        ingredientQuantities[49],
+        ingredientQuantities[50],
+        ingredientQuantities[51],
+        ingredientQuantities[52],
+        ingredientQuantities[53],
+
+    ]
+    const GarlicButterShrimpSteps = [
+        "Melt butter in a pan over medium heat.",
+        "Add minced garlic and sauté for 1 minute until fragrant.",
+        "Toss in the shrimp, paprika, chili flakes, salt, and black pepper.",
+        "Cook for 3-4 minutes until the shrimp turn pink and opaque.",
+        "Stir in lemon juice and cook for 1 more minute.",
+        "Serve hot over cooked rice, garnished with chopped spring onion."
+    ];
+    
+    
+    const GarlicButterShrimpRecipeOwner = [
+        owners[1]
+    ]
+    await Promise.all([
+        createRecipe(6, "GarlicButterShrimp", "A Creamy Delight",GarlicButterShrimp, GarlicButterShrimpSteps,2, 30, "Mediterranean", GarlicButterShrimpRecipeOwner)
+    ]);
 
 }
