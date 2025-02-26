@@ -13,7 +13,7 @@ const RecipeSchema = new Schema({
     origin:{
         type: String,
         required: true,
-        enum: ["British", "Indian", "Persian", "African", "Latino", "Chinese", "Japanese", "Italian", "French", "Mediterranean" ],
+        enum: ["British", "Indian", "Persian", "African", "Latino", "Chinese", "Japanese", "Italian", "French", "Mediterranean"],
         default: "British",
       },
 	owners: [{ type: Schema.ObjectId, ref: "Owner", required: true }]
