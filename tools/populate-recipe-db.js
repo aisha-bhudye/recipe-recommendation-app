@@ -151,7 +151,16 @@ async function createListOfIngredients() {
         createIngredient(27, "Soy Sauce", "Sauce"),
         createIngredient(28, "Chilli Flakes", "Chemical"),
         createIngredient(29, "Broccoli", "Vegetable"),
-        createIngredient(30, "Garlic", "Vegetable")
+        createIngredient(30, "Garlic", "Vegetable"),
+        //fruit salad//
+        createIngredient(31, "Apple", "Fruit"),
+        createIngredient(32, "Grapes", "Fruit"),
+        createIngredient(33, "Banana", "Fruit"),
+        createIngredient(34, "Lemon Juice", "Sauce"),
+        createIngredient(35, "Chia Seeds", "Fruit"),
+        createIngredient(36, "Kiwi", "Fruit"),
+        createIngredient(37, "Pomegranate", "Fruit"),
+
 
 
 
@@ -209,6 +218,16 @@ async function createListOfIngredientQuantities() {
         createIngredientQuantity(33, 'teaspoon', 1, ingredients[28]),//chilli flakes
         createIngredientQuantity(34, 'gramme', 200, ingredients[6]),//rice
         createIngredientQuantity(35, 'gramme', 15, ingredients[29]),//Broccoli
+        //fruit salad//
+        createIngredientQuantity(36, 'cup',1, ingredients[31]),//apple
+        createIngredientQuantity(37, 'cup', 1, ingredients[32]),//grapes
+        createIngredientQuantity(38, 'cup', 1, ingredients[33]),//banana
+        createIngredientQuantity(39, 'tablespoon', 1, ingredients[34]),//lemon juice
+        createIngredientQuantity(40, 'teaspoon', 1, ingredients[35]),//chia seeds
+        createIngredientQuantity(41, 'cup', 1, ingredients[36]),//kiwi
+        createIngredientQuantity(42, 'cup', 1, ingredients[37]),//Pomegranate
+        createIngredientQuantity(43, 'tablespoon', 1, ingredients[26]),//honey
+
 
     ]);
 
@@ -315,7 +334,8 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(3, "sweetPotatoandBlackBeanTacos", "A delicious healthy taco", sweetPotatoandBlackBeanTacos, sweetPotatoandBlackBeanTacosSteps, 5, 30, "British", sweetPotatoandBlackBeanTacosRecipeOwners)
     ]);
-
+    //end recipe 4
+    //staart
     const PestoAndPasta = [
         ingredientQuantities[22],
         ingredientQuantities[23],
@@ -340,7 +360,8 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(4, "PestoAndPasta", "A beautiful pesto dish", PestoAndPasta, PestoAndPastaSteps, 8, 15, "Italian", PestoAndPastaRecipeOwner)
     ]);
-
+    //end
+    //start
     const SpicyHoneySalmonRice = [
         ingredientQuantities[29],
         ingredientQuantities[30],
@@ -367,6 +388,35 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(5, "SpicyHoneySalmonRice", "A sweet and spicy twist", SpicyHoneySalmonRice, SpicyHoneySalmonRiceSteps, 2, 45, "Chinese", SpicyHoneySalmonRiceRecipeOwner)
     ]);
+    //end
+    //start
+    const FruitSalad = [
+        ingredientQuantities[36],
+        ingredientQuantities[37],
+        ingredientQuantities[38],
+        ingredientQuantities[39],
+        ingredientQuantities[40],
+        ingredientQuantities[41],
+        ingredientQuantities[42],
+        ingredientQuantities[43],
+
+    ]
+    const FruitSaladSteps = [
+        "Halve the grapes, dice the apple, slice the banana, peel and segment the orange, and cut into bits",
+        "In a large bowl, combine all the fruits.",
+        "In a small bowl, whisk together the honey and lime juice to make the dressing.",
+        "Drizzle the dressing over the fruit and gently toss to coat everything evenly.",
+        "Sprinkle with chia seeds if using, and serve immediately or chill for 10 minutes before serving."
+    ];
+    
+    
+    const FruitSaladRecipeOwner = [
+        owners[1]
+    ]
+    await Promise.all([
+        createRecipe(6, "FruitSalad", "A summer treat", FruitSalad, FruitSaladSteps,4, 15, "Mediterranean", FruitSaladRecipeOwner)
+    ]);
+    //end
 
 
 }
