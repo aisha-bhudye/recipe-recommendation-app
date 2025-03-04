@@ -11,5 +11,8 @@ mixin thumbCard(recipe)
 					.btn-group
 						button.btn.btn-sm.btn-outline-secondary
 							a(href=recipe.url) View
-						button.btn.btn-sm.btn-outline-secondary Edit
+						if recipe.isNotVegetarian
+							button.btn.btn-sm.btn-outline-secondary Non-Veg
+						else
+							button.btn.btn-sm.btn-outline-secondary Veg
 					small.text-muted #{recipe.preparationTime} mins

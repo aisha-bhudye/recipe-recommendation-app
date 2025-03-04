@@ -3,7 +3,7 @@ extends layout.pug
 block content
 	- const formattedUpdatedAt = moment(recipe.updatedAt).format('DD/MMM/yyyy HH:mm:ss')
 	- const owners = recipe.owners
-	- const ingredientQuantities = recipe.ingredients 
+	- const ingredientAmounts = recipe.ingredientAmounts 
 	- const recipeSteps = recipe.steps
 	- const imagePath = `/images/${recipe.name}.png`
 	.container
@@ -22,12 +22,12 @@ block content
 				hr
 				h3 Ingredients
 				p
-					| You will need the following ingredients:
+					| You will need the following ingredientAmounts:
 				ol
-					if ingredientQuantities.length 
-						each ingredientQuantity in ingredientQuantities
-							- const ingredient= ingredientQuantity.ingredient
-								li #{ingredientQuantity.quantity} #{ingredientQuantity.unit}(s) of #{ingredient.name} 
+					if ingredientAmounts.length 
+						each ingredientAmount in ingredientAmounts
+							- const ingredient= ingredientAmount.ingredient
+								li #{ingredientAmount.quantity} #{ingredientAmount.unit}(s) of #{ingredient.name} #{ingredient.category}
 
 				
 				h3 Steps

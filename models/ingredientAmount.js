@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const IngredientQuantitySchema = new Schema({
+const ingredientAmountSchema = new Schema({
   unit: {
     type: String,
     required: true,
@@ -14,13 +14,13 @@ const IngredientQuantitySchema = new Schema({
 });
 
 // Virtual for this book instance URL.
-IngredientQuantitySchema.virtual("url").get(function () {
-  return "/ingredientQuantity/" + this._id;
+ingredientAmountSchema.virtual("url").get(function () {
+  return "/ingredientAmount/" + this._id;
 });
 
-IngredientQuantitySchema.virtual("ingredientstep").get(function () {
+ingredientAmountSchema.virtual("ingredientAmountStep").get(function () {
   return this.quantity + ' ' + this.unit;
 });
 
 // Export model.
-module.exports = mongoose.model("IngredientQuantity", IngredientQuantitySchema);
+module.exports = mongoose.model("IngredientAmount", ingredientAmountSchema);

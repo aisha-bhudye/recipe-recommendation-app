@@ -7,18 +7,23 @@ console.log(
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
 
+/**
+ * Require the mongoose Models and name the models starting with upper case as per moongoose convention
+ * https://mongoosejs.com/docs/index.html
+ */
 const Ingredient = require("../models/ingredient");
 const Owner = require("../models/owner");
-const IngredientQuantity = require("../models/ingredientQuantity");
+const IngredientAmount = require("../models/ingredientAmount");
 const Recipe = require("../models/recipe");
 
-const ingredients = [];
+// require all the logic functions for categorising recipes
+const { isNutFree, isGlutenFree, isVegetarian, isVegan } = require("../logic/categorize-recipe");
+
+const ingredientAmounts = [];
 const owners = [];
-const ingredientQuantities = [];
 const recipes = [];
 
 const mongoose = require("mongoose");
-const owner = require("../models/owner");
 mongoose.set("strictQuery", false);
 
 const mongoDB = userArgs[0];
@@ -32,13 +37,13 @@ async function main() {
 
     await Ingredient.deleteMany();
     await Owner.deleteMany();
-    await IngredientQuantity.deleteMany();
+    await IngredientAmount.deleteMany();
     await Recipe.deleteMany();
     console.log("Debug: Emptied all collections");
 
     await createListOfIngredients();
     await createListOfOwners();
-    await createListOfIngredientQuantities();
+    await createListOfIngredientAmounts();
     await createListOfRecipes();
 
     console.log("Debug: Closing mongoose");
@@ -66,7 +71,7 @@ async function createIngredient(indexParam, nameParam, classParam, dietaryAdvice
     await ingredient.save();
 
     //Insert the ingredient that has been successfully saved into the position indicated by indexParam
-    ingredients[indexParam] = ingredient;
+    ingredientAmounts[indexParam] = ingredient;
 
     //Log the ingredient to the console as a feedback of successful completion
     console.log(`Added ingredient ${JSON.stringify(ingredientObject)}`);
@@ -86,29 +91,34 @@ async function createOwner(indexParam, firstNameParam, familyNameParam, dateOfBi
 
 }
 
-async function createIngredientQuantity(indexParam, unitParam, quantityParam, ingredientParam) {
-    const ingredientQuantityObject = {
+async function createIngredientAmount(indexParam, unitParam, quantityParam, ingredientParam) {
+    const ingredientAmountObject = {
         unit: unitParam,
         quantity: quantityParam,
         ingredient: ingredientParam
     }
-    const ingredientQuantity = new IngredientQuantity(ingredientQuantityObject);
-    await ingredientQuantity.save();
-    ingredientQuantities[indexParam] = ingredientQuantity;
-    console.log(`Added ingredientQuantity ${JSON.stringify(ingredientQuantityObject)}`);
+    const ingredientAmount = new IngredientAmount(ingredientAmountObject);
+    await ingredientAmount.save();
+    ingredientAmounts[indexParam] = ingredientAmount;
+    console.log(`Added ingredientAmount ${JSON.stringify(ingredientAmountObject)}`);
 
 }
 
-async function createRecipe(indexParam, nameParam, descriptionParam, ingredientsParam, stepsParam, servesParam, preparationTimeParam, originParam, ownerParam) {
+async function createRecipe(indexParam, nameParam, descriptionParam, ingredientAmountsParam, stepsParam, servesParam, preparationTimeParam, originParam, ownerParam) {
+
     const recipeObject = {
         name: nameParam,
         description: descriptionParam,
-        ingredients: ingredientsParam,
+        ingredientAmounts: ingredientAmountsParam,
         steps: stepsParam,
         serves: servesParam,
         preparationTime: preparationTimeParam,
         origin: originParam,
-        owners: ownerParam
+        owners: ownerParam,
+        isGlutenFree: isGlutenFree(ingredientAmountsParam),
+        isNutFree: isNutFree(ingredientAmountsParam),
+        isVegetarian: isVegetarian(ingredientAmountsParam),
+        isVegan: isVegan(ingredientAmountsParam)
     }
     const recipe = new Recipe(recipeObject);
     await recipe.save();
@@ -145,8 +155,7 @@ async function createListOfIngredients() {
         createIngredient(22, "Pasta", "Carbohydrate"),
         createIngredient(23, "Pesto", "Sauce"),
         createIngredient(24, "Parmesan Cheese", "Dairy"),
-
-        createIngredient(25, "Salmon", "Fish" ),
+        createIngredient(25, "Salmon", "Fish"),
         createIngredient(26, "Honey", "Sauce"),
         createIngredient(27, "Soy Sauce", "Sauce"),
         createIngredient(28, "Chilli Flakes", "Chemical"),
@@ -160,7 +169,6 @@ async function createListOfIngredients() {
         createIngredient(35, "Chia Seeds", "Fruit"),
         createIngredient(36, "Kiwi", "Fruit"),
         createIngredient(37, "Pomegranate", "Fruit"),
-
         //shrimp rice//
         createIngredient(38, "Shrimp", "Fish"),
         createIngredient(39, "Butter", "Dairy"),
@@ -168,9 +176,6 @@ async function createListOfIngredients() {
         createIngredient(41, "Lemon Juice", "Sauce"),
         createIngredient(42, "Spring Onion", "Vegetable"),
         createIngredient(43, "Paprika", "Chemical"),
-
-
-
     ]);
 
 }
@@ -178,73 +183,74 @@ async function createListOfIngredients() {
 async function createListOfOwners() {
     console.log("Adding owners");
     await Promise.all([
-        createOwner(0, "Aisha", "Bhudye", "01/01/2003", "Aisha was born in Newham to African Asian parents"),
+        createOwner(0,
+            "Aisha", "Bhudye", "01/01/2003", "Aisha was born in Newham to African Asian parents"),
         createOwner(1, "Alexis", "Xavier", "02/02/2003", "Alexis was born to parents from lovely Portugal")
     ]);
 
 }
 
-async function createListOfIngredientQuantities() {
-    console.log("Adding ingredients");
+async function createListOfIngredientAmounts() {
+    console.log("Adding ingredientAmounts");
     await Promise.all([
-        createIngredientQuantity(0, 'teaspoon', 2.0, ingredients[0]),
-        createIngredientQuantity(1, 'tablespoon', 5.0, ingredients[1]),
-        createIngredientQuantity(2, 'gramme', 1000.0, ingredients[2]),
-        createIngredientQuantity(3, 'cup', 2.0, ingredients[3]),
-        createIngredientQuantity(4, 'gramme', 2000.0, ingredients[4]),
-        createIngredientQuantity(5, 'gramme', 2000.0, ingredients[5]),
-        createIngredientQuantity(6, 'gramme', 2000.0, ingredients[6]),
-        createIngredientQuantity(7, 'gramme', 240, ingredients[7]),
-        createIngredientQuantity(8, 'gramme', 150, ingredients[8]),
-        createIngredientQuantity(9, 'gramme', 70, ingredients[9]),
-        createIngredientQuantity(10, 'gramme', 100, ingredients[10]),
-        createIngredientQuantity(11, 'gramme', 15, ingredients[11]),
-        createIngredientQuantity(12, 'gramme', 50, ingredients[12]),
-        createIngredientQuantity(13, 'gramme', 2, ingredients[13]),
-        createIngredientQuantity(14, 'gramme', 2, ingredients[14]),
-        createIngredientQuantity(15, 'gramme', 250, ingredients[15]),
-        createIngredientQuantity(16, 'gramme', 170, ingredients[16]),
-        createIngredientQuantity(17, 'tablespoon', 1, ingredients[17]),
-        createIngredientQuantity(18, 'tablespoon', 1, ingredients[18]),
-        createIngredientQuantity(19, 'tablespoon', 1, ingredients[19]),
-        createIngredientQuantity(20, 'piece', 1, ingredients[20]),
-        createIngredientQuantity(21, 'gramme', 50, ingredients[21]),
+        createIngredientAmount(0, 'teaspoon', 2.0, ingredientAmounts[0]),
+        createIngredientAmount(1, 'tablespoon', 5.0, ingredientAmounts[1]),
+        createIngredientAmount(2, 'gramme', 1000.0, ingredientAmounts[2]),
+        createIngredientAmount(3, 'cup', 2.0, ingredientAmounts[3]),
+        createIngredientAmount(4, 'gramme', 2000.0, ingredientAmounts[4]),
+        createIngredientAmount(5, 'gramme', 2000.0, ingredientAmounts[5]),
+        createIngredientAmount(6, 'gramme', 2000.0, ingredientAmounts[6]),
+        createIngredientAmount(7, 'gramme', 240, ingredientAmounts[7]),
+        createIngredientAmount(8, 'gramme', 150, ingredientAmounts[8]),
+        createIngredientAmount(9, 'gramme', 70, ingredientAmounts[9]),
+        createIngredientAmount(10, 'gramme', 100, ingredientAmounts[10]),
+        createIngredientAmount(11, 'gramme', 15, ingredientAmounts[11]),
+        createIngredientAmount(12, 'gramme', 50, ingredientAmounts[12]),
+        createIngredientAmount(13, 'gramme', 2, ingredientAmounts[13]),
+        createIngredientAmount(14, 'gramme', 2, ingredientAmounts[14]),
+        createIngredientAmount(15, 'gramme', 250, ingredientAmounts[15]),
+        createIngredientAmount(16, 'gramme', 170, ingredientAmounts[16]),
+        createIngredientAmount(17, 'tablespoon', 1, ingredientAmounts[17]),
+        createIngredientAmount(18, 'tablespoon', 1, ingredientAmounts[18]),
+        createIngredientAmount(19, 'tablespoon', 1, ingredientAmounts[19]),
+        createIngredientAmount(20, 'piece', 1, ingredientAmounts[20]),
+        createIngredientAmount(21, 'gramme', 50, ingredientAmounts[21]),
         //pesto pasta //
-        createIngredientQuantity(22, 'tablespoon', 2, ingredients[11]),//olive oil
-        createIngredientQuantity(23, 'tablespoon', 2, ingredients[24]),//cheese parmeason
-        createIngredientQuantity(24, 'gramme', 450, ingredients[22]),//pasta
-        createIngredientQuantity(25, 'cup', 0.5, ingredients[2]),//onion
-        createIngredientQuantity(26, 'tablespoon', 2.5, ingredients[23]),//pesto
-        createIngredientQuantity(27, 'teaspoon', 0.5, ingredients[0]),//salt
-        createIngredientQuantity(28, 'tablespoon', 2, ingredients[14]),//pepper
+        createIngredientAmount(22, 'tablespoon', 2, ingredientAmounts[11]),//olive oil
+        createIngredientAmount(23, 'tablespoon', 2, ingredientAmounts[24]),//cheese parmeason
+        createIngredientAmount(24, 'gramme', 450, ingredientAmounts[22]),//pasta
+        createIngredientAmount(25, 'cup', 0.5, ingredientAmounts[2]),//onion
+        createIngredientAmount(26, 'tablespoon', 2.5, ingredientAmounts[23]),//pesto
+        createIngredientAmount(27, 'teaspoon', 0.5, ingredientAmounts[0]),//salt
+        createIngredientAmount(28, 'tablespoon', 2, ingredientAmounts[14]),//pepper
         //salmon Honey//
-        createIngredientQuantity(29, 'gramme', 250, ingredients[25]),//salmon
-        createIngredientQuantity(30, 'tablespoon', 2, ingredients[26]),//honey
-        createIngredientQuantity(31, 'tablespoon', 1, ingredients[27]),//soy sauce
-        createIngredientQuantity(32, 'tablespoon', 1, ingredients[30]),//garlic
-        createIngredientQuantity(33, 'teaspoon', 1, ingredients[28]),//chilli flakes
-        createIngredientQuantity(34, 'gramme', 200, ingredients[6]),//rice
-        createIngredientQuantity(35, 'gramme', 15, ingredients[29]),//Broccoli
+        createIngredientAmount(29, 'gramme', 250, ingredientAmounts[25]),//salmon
+        createIngredientAmount(30, 'tablespoon', 2, ingredientAmounts[26]),//honey
+        createIngredientAmount(31, 'tablespoon', 1, ingredientAmounts[27]),//soy sauce
+        createIngredientAmount(32, 'tablespoon', 1, ingredientAmounts[30]),//garlic
+        createIngredientAmount(33, 'teaspoon', 1, ingredientAmounts[28]),//chilli flakes
+        createIngredientAmount(34, 'gramme', 200, ingredientAmounts[6]),//rice
+        createIngredientAmount(35, 'gramme', 15, ingredientAmounts[29]),//Broccoli
         //fruit salad//
-        createIngredientQuantity(36, 'cup',1, ingredients[31]),//apple
-        createIngredientQuantity(37, 'cup', 1, ingredients[32]),//grapes
-        createIngredientQuantity(38, 'cup', 1, ingredients[33]),//banana
-        createIngredientQuantity(39, 'tablespoon', 1, ingredients[34]),//lemon juice
-        createIngredientQuantity(40, 'teaspoon', 1, ingredients[35]),//chia seeds
-        createIngredientQuantity(41, 'cup', 1, ingredients[36]),//kiwi
-        createIngredientQuantity(42, 'cup', 1, ingredients[37]),//Pomegranate
-        createIngredientQuantity(43, 'tablespoon', 1, ingredients[26]),//honey
+        createIngredientAmount(36, 'cup', 1, ingredientAmounts[31]),//apple
+        createIngredientAmount(37, 'cup', 1, ingredientAmounts[32]),//grapes
+        createIngredientAmount(38, 'cup', 1, ingredientAmounts[33]),//banana
+        createIngredientAmount(39, 'tablespoon', 1, ingredientAmounts[34]),//lemon juice
+        createIngredientAmount(40, 'teaspoon', 1, ingredientAmounts[35]),//chia seeds
+        createIngredientAmount(41, 'cup', 1, ingredientAmounts[36]),//kiwi
+        createIngredientAmount(42, 'cup', 1, ingredientAmounts[37]),//Pomegranate
+        createIngredientAmount(43, 'tablespoon', 1, ingredientAmounts[26]),//honey
         // Shrimp rice//
-        createIngredientQuantity(44, 'gramme', 200, ingredients[38]),//Shrimp
-        createIngredientQuantity(45, 'tablespoon',2, ingredients[39]),//Butter
-        createIngredientQuantity(46, 'tablespoon', 1, ingredients[30]),//Garlic
-        createIngredientQuantity(47, 'teaspoon', 1, ingredients[43]),//Paprika
-        createIngredientQuantity(48, 'teaspoon', 1, ingredients[28]),//ChilliFlakes
-        createIngredientQuantity(49, 'cup', 1, ingredients[6]),//Rice
-        createIngredientQuantity(50, 'cup', 1, ingredients[32]),//Lemon
-        createIngredientQuantity(51, 'gramme', 25, ingredients[42]),//Spring Onion
-        createIngredientQuantity(52, 'teaspoon', 0.5, ingredients[0]),//Salt
-        createIngredientQuantity(53, 'teaspoon', 0.5, ingredients[14]),//pepper
+        createIngredientAmount(44, 'gramme', 200, ingredientAmounts[38]),//Shrimp
+        createIngredientAmount(45, 'tablespoon', 2, ingredientAmounts[39]),//Butter
+        createIngredientAmount(46, 'tablespoon', 1, ingredientAmounts[30]),//Garlic
+        createIngredientAmount(47, 'teaspoon', 1, ingredientAmounts[43]),//Paprika
+        createIngredientAmount(48, 'teaspoon', 1, ingredientAmounts[28]),//ChilliFlakes
+        createIngredientAmount(49, 'cup', 1, ingredientAmounts[6]),//Rice
+        createIngredientAmount(50, 'cup', 1, ingredientAmounts[32]),//Lemon
+        createIngredientAmount(51, 'gramme', 25, ingredientAmounts[42]),//Spring Onion
+        createIngredientAmount(52, 'teaspoon', 0.5, ingredientAmounts[0]),//Salt
+        createIngredientAmount(53, 'teaspoon', 0.5, ingredientAmounts[14]),//pepper
 
     ]);
 
@@ -253,13 +259,14 @@ async function createListOfIngredientQuantities() {
 async function createListOfRecipes() {
     console.log("Adding recipes");
 
-    const kaliaIngredientQuantities = [
-        ingredientQuantities[0],
-        ingredientQuantities[1],
-        ingredientQuantities[2],
-        ingredientQuantities[3],
-        ingredientQuantities[4],
-        ingredientQuantities[5],
+    //start kalia
+    const kaliaIngredientAmounts = [
+        ingredientAmounts[0],
+        ingredientAmounts[1],
+        ingredientAmounts[2],
+        ingredientAmounts[3],
+        ingredientAmounts[4],
+        ingredientAmounts[5],
     ]
     const kaliaSteps = [
         "Soak the protein source of your choice overnight with the spices, the yoghurt and the salt",
@@ -268,22 +275,30 @@ async function createListOfRecipes() {
         "Add the fried potatoes and the fried onions to the mix",
         "Bring to boil and then allow to simmer for about 30 mins, adding water to bring the broth to a consistency to your taste"
     ]
-    const kaliaRecipeOwners = [
-        owners[0]
-    ]
     await Promise.all([
-        createRecipe(0, "Kalia", "This is an Asian broth that is typically made using chicken or beef", kaliaIngredientQuantities, kaliaSteps, 5, 60, "Indian", kaliaRecipeOwners)
+        createRecipe(
+            0,
+            "Kalia",
+            "This is an Asian broth that is typically made using chicken or beef",
+            kaliaIngredientAmounts,
+            kaliaSteps,
+            5,
+            60,
+            "Indian",
+            owners,
+        )
     ]);
+    //end kalia
 
-
-    const brianiIngredientQuantities = [
-        ingredientQuantities[0],
-        ingredientQuantities[1],
-        ingredientQuantities[2],
-        ingredientQuantities[3],
-        ingredientQuantities[4],
-        ingredientQuantities[5],
-        ingredientQuantities[6]
+    //start briani
+    const brianiIngredientAmounts = [
+        ingredientAmounts[0],
+        ingredientAmounts[1],
+        ingredientAmounts[2],
+        ingredientAmounts[3],
+        ingredientAmounts[4],
+        ingredientAmounts[5],
+        ingredientAmounts[6]
     ]
     const brianiSteps = [
         "Soak the protein source of your choice overnight with the spices, the yoghurt and the salt",
@@ -294,23 +309,30 @@ async function createListOfRecipes() {
         "Seal the recipient with aluminium foil underneath its cover",
         "Cook on highest fire for 10 mins and then on low fire for another 40 mins"
     ]
-    const brianiRecipeOwners = [
-        owners[0]
-    ]
     await Promise.all([
-        createRecipe(1, "Briani", "This is an Asian rice mix with potato, typically made using chicken or beef", brianiIngredientQuantities, brianiSteps, 5, 60, "Indian", brianiRecipeOwners)
+        createRecipe(
+            1,
+            "Briani",
+            "This is an Asian rice mix with potato, typically made using chicken or beef",
+            brianiIngredientAmounts,
+            brianiSteps,
+            5,
+            60,
+            "Indian",
+            owners)
     ]);
+    //end briani
 
     //Start Recipe 3
     const chickpeaAndAvocadoSalad = [
-        ingredientQuantities[7],
-        ingredientQuantities[8],
-        ingredientQuantities[9],
-        ingredientQuantities[10],
-        ingredientQuantities[11],
-        ingredientQuantities[12],
-        ingredientQuantities[13],
-        ingredientQuantities[14],
+        ingredientAmounts[7],
+        ingredientAmounts[8],
+        ingredientAmounts[9],
+        ingredientAmounts[10],
+        ingredientAmounts[11],
+        ingredientAmounts[12],
+        ingredientAmounts[13],
+        ingredientAmounts[14],
     ]
     const chickpeaAndAvocadoSaladSteps = [
         "Mash the avocado in a bowl.",
@@ -324,7 +346,17 @@ async function createListOfRecipes() {
         owners[0]
     ]
     await Promise.all([
-        createRecipe(2, "ChickPea&AvocadoSalad", "A delicious healthy salad", chickpeaAndAvocadoSalad, chickpeaAndAvocadoSaladSteps, 5, 30, "British", chickpeaAndAvocadoSaladRecipeOwners)
+        createRecipe(
+            2,
+            "ChickPea&AvocadoSalad",
+            "A delicious healthy salad",
+            chickpeaAndAvocadoSalad,
+            chickpeaAndAvocadoSaladSteps,
+            5,
+            30,
+            "British",
+            chickpeaAndAvocadoSaladRecipeOwners
+        )
     ]);
 
     //End Recipe 3
@@ -332,13 +364,13 @@ async function createListOfRecipes() {
 
     //Start Recipe 4
     const sweetPotatoandBlackBeanTacos = [
-        ingredientQuantities[15],
-        ingredientQuantities[16],
-        ingredientQuantities[17],
-        ingredientQuantities[18],
-        ingredientQuantities[19],
-        ingredientQuantities[20],
-        ingredientQuantities[21],
+        ingredientAmounts[15],
+        ingredientAmounts[16],
+        ingredientAmounts[17],
+        ingredientAmounts[18],
+        ingredientAmounts[19],
+        ingredientAmounts[20],
+        ingredientAmounts[21],
     ]
     const sweetPotatoandBlackBeanTacosSteps = [
         "Roast sweet potato cubes at 200°C (400°F) for 20 minutes.",
@@ -349,48 +381,66 @@ async function createListOfRecipes() {
         owners[0]
     ]
     await Promise.all([
-        createRecipe(3, "sweetPotatoandBlackBeanTacos", "A delicious healthy taco", sweetPotatoandBlackBeanTacos, sweetPotatoandBlackBeanTacosSteps, 5, 30, "British", sweetPotatoandBlackBeanTacosRecipeOwners)
+        createRecipe(3,
+            "sweetPotatoandBlackBeanTacos",
+            "A delicious healthy taco",
+            sweetPotatoandBlackBeanTacos,
+            sweetPotatoandBlackBeanTacosSteps,
+            5,
+            30,
+            "British",
+            sweetPotatoandBlackBeanTacosRecipeOwners)
     ]);
     //end recipe 4
-    //staart
-    const PestoAndPasta = [
-        ingredientQuantities[22],
-        ingredientQuantities[23],
-        ingredientQuantities[24],
-        ingredientQuantities[25],
-        ingredientQuantities[26],
-        ingredientQuantities[27],
-        ingredientQuantities[28],
+
+    //start
+    const pestoAndPasta = [
+        ingredientAmounts[22],
+        ingredientAmounts[23],
+        ingredientAmounts[24],
+        ingredientAmounts[25],
+        ingredientAmounts[26],
+        ingredientAmounts[27],
+        ingredientAmounts[28],
 
     ]
 
-    const PestoAndPastaSteps = [
+    const pestoAndPastaSteps = [
         "Boil pasta in salted water until soft; and then drain.",
         "Sauté chopped onion in olive oil until translucent.",
         "Stir in pesto sauce, salt, and pepper.",
         "Toss pasta with the pesto mixture until evenly coated.",
         "Sprinkle with grated Parmesan cheese and serve."
     ]
-    const PestoAndPastaRecipeOwner = [
+    const pestoAndPastaRecipeOwner = [
         owners[1]
     ]
     await Promise.all([
-        createRecipe(4, "PestoAndPasta", "A beautiful pesto dish", PestoAndPasta, PestoAndPastaSteps, 8, 15, "Italian", PestoAndPastaRecipeOwner)
+        createRecipe(4,
+            "PestoAndPasta",
+            "A beautiful pesto dish",
+            pestoAndPasta,
+            pestoAndPastaSteps,
+            8,
+            15,
+            "Italian",
+            pestoAndPastaRecipeOwner)
     ]);
     //end
+
     //start
-    const SpicyHoneySalmonRice = [
-        ingredientQuantities[29],
-        ingredientQuantities[30],
-        ingredientQuantities[31],
-        ingredientQuantities[32],
-        ingredientQuantities[33],
-        ingredientQuantities[34],
-        ingredientQuantities[35],
+    const spicyHoneySalmonRice = [
+        ingredientAmounts[29],
+        ingredientAmounts[30],
+        ingredientAmounts[31],
+        ingredientAmounts[32],
+        ingredientAmounts[33],
+        ingredientAmounts[34],
+        ingredientAmounts[35],
 
     ]
 
-    const SpicyHoneySalmonRiceSteps = [
+    const spicyHoneySalmonRiceSteps = [
         "Preheat oven to 200°C (400°F).",
         "Mix honey, soy sauce, chili flakes, and minced garlic in a bowl.",
         "Place salmon fillets on a baking tray and drizzle with the honey mixture.",
@@ -398,58 +448,76 @@ async function createListOfRecipes() {
         "Steam broccoli until tender and cook rice according to package instructions.",
         "Serve salmon with rice and steamed broccoli."
     ];
-    
-    const SpicyHoneySalmonRiceRecipeOwner = [
+
+    const spicyHoneySalmonRiceRecipeOwner = [
         owners[1]
     ]
     await Promise.all([
-        createRecipe(5, "SpicyHoneySalmonRice", "A sweet and spicy twist", SpicyHoneySalmonRice, SpicyHoneySalmonRiceSteps, 2, 45, "Chinese", SpicyHoneySalmonRiceRecipeOwner)
+        createRecipe(5,
+            "SpicyHoneySalmonRice",
+            "A sweet and spicy twist",
+            spicyHoneySalmonRice,
+            spicyHoneySalmonRiceSteps,
+            2,
+            45,
+            "Chinese",
+            spicyHoneySalmonRiceRecipeOwner)
     ]);
     //end
+
     //start
-    const FruitSalad = [
-        ingredientQuantities[36],
-        ingredientQuantities[37],
-        ingredientQuantities[38],
-        ingredientQuantities[39],
-        ingredientQuantities[40],
-        ingredientQuantities[41],
-        ingredientQuantities[42],
-        ingredientQuantities[43],
+    const fruitSalad = [
+        ingredientAmounts[36],
+        ingredientAmounts[37],
+        ingredientAmounts[38],
+        ingredientAmounts[39],
+        ingredientAmounts[40],
+        ingredientAmounts[41],
+        ingredientAmounts[42],
+        ingredientAmounts[43],
 
     ]
-    const FruitSaladSteps = [
+    const fruitSaladSteps = [
         "Halve the grapes, dice the apple, slice the banana, peel and segment the orange, and cut into bits",
         "In a large bowl, combine all the fruits.",
         "In a small bowl, whisk together the honey and lime juice to make the dressing.",
         "Drizzle the dressing over the fruit and gently toss to coat everything evenly.",
         "Sprinkle with chia seeds if using, and serve immediately or chill for 10 minutes before serving."
     ];
-    
-    
-    const FruitSaladRecipeOwner = [
+
+
+    const fruitSaladRecipeOwner = [
         owners[1]
     ]
     await Promise.all([
-        createRecipe(6, "FruitSalad", "A summer treat", FruitSalad, FruitSaladSteps,4, 15, "Mediterranean", FruitSaladRecipeOwner)
+        createRecipe(6,
+            "FruitSalad",
+            "A summer treat",
+            fruitSalad,
+            fruitSaladSteps,
+            4,
+            15,
+            "Mediterranean",
+            fruitSaladRecipeOwner
+        )
     ]);
     //end
 
     //start//
-    const GarlicButterShrimp = [
-        ingredientQuantities[44],
-        ingredientQuantities[45],
-        ingredientQuantities[46],
-        ingredientQuantities[47],
-        ingredientQuantities[48],
-        ingredientQuantities[49],
-        ingredientQuantities[50],
-        ingredientQuantities[51],
-        ingredientQuantities[52],
-        ingredientQuantities[53],
+    const garlicButterShrimp = [
+        ingredientAmounts[44],
+        ingredientAmounts[45],
+        ingredientAmounts[46],
+        ingredientAmounts[47],
+        ingredientAmounts[48],
+        ingredientAmounts[49],
+        ingredientAmounts[50],
+        ingredientAmounts[51],
+        ingredientAmounts[52],
+        ingredientAmounts[53],
 
     ]
-    const GarlicButterShrimpSteps = [
+    const garlicButterShrimpSteps = [
         "Melt butter in a pan over medium heat.",
         "Add minced garlic and sauté for 1 minute until fragrant.",
         "Toss in the shrimp, paprika, chili flakes, salt, and black pepper.",
@@ -457,13 +525,21 @@ async function createListOfRecipes() {
         "Stir in lemon juice and cook for 1 more minute.",
         "Serve hot over cooked rice, garnished with chopped spring onion."
     ];
-    
-    
-    const GarlicButterShrimpRecipeOwner = [
+
+
+    const garlicButterShrimpRecipeOwner = [
         owners[1]
     ]
     await Promise.all([
-        createRecipe(6, "GarlicButterShrimp", "A Creamy Delight",GarlicButterShrimp, GarlicButterShrimpSteps,2, 30, "Mediterranean", GarlicButterShrimpRecipeOwner)
+        createRecipe(6,
+            "GarlicButterShrimp",
+            "A Creamy Delight",
+            garlicButterShrimp,
+            garlicButterShrimpSteps,
+            2,
+            30,
+            "Mediterranean",
+            garlicButterShrimpRecipeOwner)
     ]);
 
 }

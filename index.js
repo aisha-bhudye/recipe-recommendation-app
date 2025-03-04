@@ -6,12 +6,11 @@ const mongoose = require("mongoose");
 const Recipe = require("./models/recipe");
 const Ingredient = require("./models/ingredient");
 const Owner = require("./models/owner");
-const IngredientQuantity = require("./models/ingredientQuantity");
+const IngredientAmount = require("./models/ingredientAmount");
 
 const app = express();
 app.locals.moment = moment
 
-const ingredient = require("./models/ingredient");
 mongoose.set("strictQuery", false);
 
 const dev_db_url =
@@ -34,9 +33,15 @@ app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (req, res) => {
-	const allRecipes = await Recipe.find({}, "name description ingredients serves preparationTime origin")
+	const allRecipes = await Recipe.find({}, "name description ingredientAmounts serves preparationTime origin")
 		.sort({ name: 1 })
-		.populate("ingredients")
+		.populate({
+			path: 'ingredientAmounts',
+			populate: {
+				path: 'ingredient',
+				model: 'Ingredient'
+			}
+		})
 		.exec();
 
 	res.render("index", {
@@ -47,7 +52,7 @@ app.get("/", async (req, res) => {
 app.get("/recipe/:id", async (req, res, next) => {
 	const recipeById = await Recipe.findById(req.params.id)
 		.populate({
-			path: 'ingredients',
+			path: 'ingredientAmounts',
 			populate: {
 				path: 'ingredient',
 				model: 'Ingredient'
@@ -67,6 +72,13 @@ app.get("/recipe/:id", async (req, res, next) => {
 	})
 
 });
+
+app.get("/dietary-requirements", async (req, res, next) => {
+
+	res.render("dietary-requirements", {})
+
+});
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

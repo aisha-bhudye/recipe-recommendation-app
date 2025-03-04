@@ -1,0 +1,42 @@
+extends layout.pug
+
+block content
+	.container
+		.py-5.text-center
+			h2 Your dietary requirements
+			p
+				| Please tell us about your dietary requirements and we will list the recipes that are suitable for you.
+		.row
+			.cold-md-8.order-md-1
+				h4 Your details
+				form.needs-validation
+					.row
+						.col-md-6.md-3
+							label(for='firstName') First name 	
+							input#firstName.form-control(type='text', placeholder='', required)
+							.invalid-feedback
+								| Valid first name is required
+						.col-md-6.md-3
+							label(for='lastName') Last name 	
+							input#lastName.form-control(type='text', placeholder='', required)
+							.invalid-feedback
+								| Valid last name is required
+				hr.mb-4
+				.checkbox
+					label(for='glutenIntolerance') Do you suffer from any form of gluten intolerance? 
+						input#glutenIntolerance(type='checkbox', value='')
+				hr.mb-4
+				.checkbox
+					label(for='nutAllergy') Do you suffer from any form of nut allergy? 
+						input#nutAllergy(type='checkbox', value='')
+				hr.mb-4
+				.checkbox
+					label(for='vegetarian') Are you vegetarian? 
+						input#vegetarian(type='checkbox', value='')
+				hr.mb-4
+				.checkbox
+					label(for='vegan') Are you vegan? 
+						input#vegan(type='checkbox', value='')
+		.row
+			button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit your details
+
