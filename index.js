@@ -31,7 +31,7 @@ async function main() {
 app.set("view engine", "pug");
 
 app.use(express.static(path.join(__dirname, "public")));
-
+//When a request comes in at /, retrieve all the recipes from MongoDB via mongoose and then hand over to index.pug for rendering
 app.get("/", async (req, res) => {
 	const allRecipes = await Recipe.find({}, "name description ingredientAmounts serves preparationTime origin")
 		.sort({ name: 1 })
@@ -50,6 +50,8 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/recipe/:id", async (req, res, next) => {
+	//When a request comes in at /recipe/:id where id is the MongoDB id of the recipe object, retrieve recipe that matches this id from MongoDB via mongoose 
+	//and then hand over to recipe-detail.pug for rendering
 	const recipeById = await Recipe.findById(req.params.id)
 		.populate({
 			path: 'ingredientAmounts',
@@ -74,6 +76,7 @@ app.get("/recipe/:id", async (req, res, next) => {
 });
 
 app.get("/dietary-requirements", async (req, res, next) => {
+	//When a request comes in at /ietary-requirements, then hand over to dietary-requirements.pug to render the form
 
 	res.render("dietary-requirements", {})
 
