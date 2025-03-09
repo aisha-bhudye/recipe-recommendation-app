@@ -15,27 +15,37 @@ block content
 							input#firstName.form-control(type='text', name='firstName', placeholder='First name', required)
 							.invalid-feedback
 								| Valid first name is required
-						.col-md-6.md-3
-							label(for='lastName') Last name 	
-							input#lastName.form-control(type='text', name='lastName', placeholder='Last name', required)
-							.invalid-feedback
-								| Valid last name is required
-					hr.mb-4
-					.checkbox
-						label(for='glutenIntolerance') Do you suffer from any form of gluten intolerance? 
-							input#glutenIntolerance(type='checkbox', name='glutenIntolerance', value='checked')
-					hr.mb-4
-					.checkbox
-						label(for='nutAllergy') Do you suffer from any form of nut allergy? 
-							input#nutAllergy(type='checkbox', name='nutAllergy',  value='checked')
-					hr.mb-4
-					.checkbox
-						label(for='vegetarian') Are you vegetarian? 
-							input#vegetarian(type='checkbox', name='vegetarian', value='checked')
-					hr.mb-4
-					.checkbox
-						label(for='vegan') Are you vegan? 
-							input#vegan(type='checkbox', name='vegan', value='checked')
+					hr
+					| Do you suffer from any form of gluten intolerance? 
+					.form-check.form-check-inline
+							input#glutenIntolerance1.form-check-input(type='radio', name='glutenIntolerance', value='true')
+							label.form-check-input(for='glutenIntolerance1') Yes
+					.form-check.form-check-inline
+							input#glutenIntolerance2.form-check-input(type='radio', name='glutenIntolerance', value='false')
+							label.form-check-input(for='glutenIntolerance2') No
+					hr
+					| Do you suffer from any form of nut allergy? 
+					.form-check.form-check-inline
+							input#nutAllergy1.form-check-input(type='radio', name='nutAllergy', value='true')
+							label.form-check-input(for='nutAllergy1') Yes
+					.form-check.form-check-inline
+							input#nutAllergy2.form-check-input(type='radio', name='nutAllergy', value='false')
+							label.form-check-input(for='nutAllergy2') No
+					hr
+					| Are you vegetarian? 
+					.form-check.form-check-inline
+							input#vegetarian1.form-check-input(type='radio', name='vegetarian', value='true')
+							label.form-check-input(for='vegetarian1') Yes
+					.form-check.form-check-inline
+							input#vegetarian2.form-check-input(type='radio', name='vegetarian', value='false')
+							label.form-check-input(for='vegetarian2') No
+					hr
+					| Are you vegan? 
+					.form-check.form-check-inline
+							input#vegan1.form-check-input(type='radio', name='vegan', value='true')
+							label.form-check-input(for='vegan1') Yes
+					.form-check.form-check-inline
+							input#vegan2.form-check-input(type='radio', name='vegan', value='false')
+							label.form-check-input(for='vegan2') No
 			.row
 				button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit your details
-

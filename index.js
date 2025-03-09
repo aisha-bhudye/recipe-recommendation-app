@@ -84,33 +84,24 @@ app.get("/dietary-requirements", async (req, res, next) => {
 app.post("/dietary-requirements", async (req, res, next) => {
 
 	const firstName = req.body.firstName;
-	const lastName = req.body.lastName;
-	const glutenFreeRequired = req.body?.glutenIntolerance === 'checked';
-	const nutFreeRequired = req.body?.nutAllergy === 'checked';
-	const vegetarianRequired = req.body?.vegetarian === 'checked';
-	const veganRequired = req.body?.vegan === 'checked';
-
 
 	let queryCriteria = {}; //Start off with none of dietary requirement set i.e. not set to either true or false
-	if (glutenFreeRequired){
-		queryCriteria.isGlutenFree = true;
+	if (req.body.glutenIntolerance){
+		queryCriteria.isGlutenFree = req.body.glutenIntolerance;
+	}
+	if (req.body.nutAllergy){
+		queryCriteria.isNutFree =  req.body.nutAllergy;
+	}
+	if (req.body.vegetarian){
+		queryCriteria.isVegetarian = req.body.vegetarian;
+	}
+	if (req.body.vegan){
+		queryCriteria.isVegan = req.body.vegan;
 	}
 
-	if (nutFreeRequired){
-		queryCriteria.isNutFree = true;
-	}
-	
-	if (vegetarianRequired){
-		queryCriteria.isVegetarian = true;
-	}
-	
-	if (veganRequired){
-		queryCriteria.isVegan = true;
-	}
-	
-	const suitableRecipes = await Recipe.find(queryCriteria, 
+	const suitableRecipes = await Recipe.find(queryCriteria,
 		"name description ingredientAmounts serves preparationTime origin isGlutenFree isNutFree isVegan isVegetarian")
-	.sort({ name: 1 })
+		.sort({ name: 1 })
 		.populate({
 			path: 'ingredientAmounts',
 			populate: {
@@ -122,11 +113,10 @@ app.post("/dietary-requirements", async (req, res, next) => {
 
 	res.render("suitable-recipes", {
 		recipes: suitableRecipes,
-		firstName: firstName 
+		firstName: firstName
 	});
 
 });
-
 
 const PORT = 3000;
 app.listen(PORT, () => {
