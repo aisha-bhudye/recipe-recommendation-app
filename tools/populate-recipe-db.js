@@ -19,6 +19,7 @@ const Recipe = require("../models/recipe");
 // require all the logic functions for categorising recipes
 const { isNutFree, isGlutenFree, isVegetarian, isVegan } = require("../logic/categorize-recipe");
 
+const ingredients = [];
 const ingredientAmounts = [];
 const owners = [];
 const recipes = [];
@@ -54,14 +55,14 @@ async function main() {
  * The same sequence of operations is used for every create method; the comments in this method will be similar to the other methods
  * @param {*} indexParam 
  * @param {*} nameParam 
- * @param {*} classParam 
+ * @param {*} categoryParam 
  * @param {*} dietaryAdviceParam 
  */
-async function createIngredient(indexParam, nameParam, classParam, dietaryAdviceParam) {
+async function createIngredient(indexParam, nameParam, categoryParam) {
     //Create a JavaScript object with the arguments that have just come in via the parameters
     const ingredientObject = {
         name: nameParam,
-        class: classParam
+        category: categoryParam
     };
 
     //Create an object using our Moongoose model
@@ -71,7 +72,7 @@ async function createIngredient(indexParam, nameParam, classParam, dietaryAdvice
     await ingredient.save();
 
     //Insert the ingredient that has been successfully saved into the position indicated by indexParam
-    ingredientAmounts[indexParam] = ingredient;
+    ingredients[indexParam] = ingredient;
 
     //Log the ingredient to the console as a feedback of successful completion
     console.log(`Added ingredient ${JSON.stringify(ingredientObject)}`);
@@ -141,26 +142,26 @@ async function createListOfIngredients() {
         createIngredient(8, "Avocado", "Fruit"),
         createIngredient(9, "Red Onion", "Vegetable"),
         createIngredient(10, "Cucumber", "Vegetable"),
-        createIngredient(11, "Olive Oil", "Oil"),
+        createIngredient(11, "Olive Oil", "Fat"),
         createIngredient(12, "Lemon", "Fruit"),
         createIngredient(13, "Salt", "Chemical"),
-        createIngredient(14, "Pepper", "Chemical"),
+        createIngredient(14, "Pepper", "Spice"),
         createIngredient(15, "Sweet Potato", "Vegetable"),
         createIngredient(16, "Black Beans", "Vegetable"),
-        createIngredient(17, "Chili Powder", "Vegetable"),
+        createIngredient(17, "Chili Powder", "Spice"),
         createIngredient(18, "Cumin", "Spice"),
-        createIngredient(19, "Olive Oil", "Oil"),
+        createIngredient(19, "Extra Virgin Olive Oil", "Fat"),
         createIngredient(20, "Tortillas", "Carbohydrate"),
-        createIngredient(21, "Avocado&Salsa for Topping", "Vegetable"),
+        createIngredient(21, "Avocado Salsa", "Vegetable"),
         createIngredient(22, "Pasta", "Carbohydrate"),
         createIngredient(23, "Pesto", "Sauce"),
         createIngredient(24, "Parmesan Cheese", "Dairy"),
         createIngredient(25, "Salmon", "Fish"),
         createIngredient(26, "Honey", "Sauce"),
         createIngredient(27, "Soy Sauce", "Sauce"),
-        createIngredient(28, "Chilli Flakes", "Chemical"),
+        createIngredient(28, "Chilli Flakes", "Spice"),
         createIngredient(29, "Broccoli", "Vegetable"),
-        createIngredient(30, "Garlic", "Vegetable"),
+        createIngredient(30, "Garlic", "Allium"),
         //fruit salad//
         createIngredient(31, "Apple", "Fruit"),
         createIngredient(32, "Grapes", "Fruit"),
@@ -172,10 +173,13 @@ async function createListOfIngredients() {
         //shrimp rice//
         createIngredient(38, "Shrimp", "Fish"),
         createIngredient(39, "Butter", "Dairy"),
-        createIngredient(40, "Garlic", "Vegetable"),
+        createIngredient(40, "Garlic", "Allium"),
         createIngredient(41, "Lemon Juice", "Sauce"),
         createIngredient(42, "Spring Onion", "Vegetable"),
-        createIngredient(43, "Paprika", "Chemical"),
+        createIngredient(43, "Paprika", "Spice"),
+		//
+		createIngredient(44, "Pistachio", "Nut"),
+		createIngredient(45, "Flour", "Gluten")
     ]);
 
 }
@@ -193,65 +197,67 @@ async function createListOfOwners() {
 async function createListOfIngredientAmounts() {
     console.log("Adding ingredientAmounts");
     await Promise.all([
-        createIngredientAmount(0, 'teaspoon', 2.0, ingredientAmounts[0]),
-        createIngredientAmount(1, 'tablespoon', 5.0, ingredientAmounts[1]),
-        createIngredientAmount(2, 'gramme', 1000.0, ingredientAmounts[2]),
-        createIngredientAmount(3, 'cup', 2.0, ingredientAmounts[3]),
-        createIngredientAmount(4, 'gramme', 2000.0, ingredientAmounts[4]),
-        createIngredientAmount(5, 'gramme', 2000.0, ingredientAmounts[5]),
-        createIngredientAmount(6, 'gramme', 2000.0, ingredientAmounts[6]),
-        createIngredientAmount(7, 'gramme', 240, ingredientAmounts[7]),
-        createIngredientAmount(8, 'gramme', 150, ingredientAmounts[8]),
-        createIngredientAmount(9, 'gramme', 70, ingredientAmounts[9]),
-        createIngredientAmount(10, 'gramme', 100, ingredientAmounts[10]),
-        createIngredientAmount(11, 'gramme', 15, ingredientAmounts[11]),
-        createIngredientAmount(12, 'gramme', 50, ingredientAmounts[12]),
-        createIngredientAmount(13, 'gramme', 2, ingredientAmounts[13]),
-        createIngredientAmount(14, 'gramme', 2, ingredientAmounts[14]),
-        createIngredientAmount(15, 'gramme', 250, ingredientAmounts[15]),
-        createIngredientAmount(16, 'gramme', 170, ingredientAmounts[16]),
-        createIngredientAmount(17, 'tablespoon', 1, ingredientAmounts[17]),
-        createIngredientAmount(18, 'tablespoon', 1, ingredientAmounts[18]),
-        createIngredientAmount(19, 'tablespoon', 1, ingredientAmounts[19]),
-        createIngredientAmount(20, 'piece', 1, ingredientAmounts[20]),
-        createIngredientAmount(21, 'gramme', 50, ingredientAmounts[21]),
+        createIngredientAmount(0, 'teaspoon', 2.0, ingredients[0]),
+        createIngredientAmount(1, 'tablespoon', 5.0, ingredients[1]),
+        createIngredientAmount(2, 'gramme', 1000.0, ingredients[2]),
+        createIngredientAmount(3, 'cup', 2.0, ingredients[3]),
+        createIngredientAmount(4, 'gramme', 2000.0, ingredients[4]),
+        createIngredientAmount(5, 'gramme', 2000.0, ingredients[5]),
+        createIngredientAmount(6, 'gramme', 2000.0, ingredients[6]),
+        createIngredientAmount(7, 'gramme', 240, ingredients[7]),
+        createIngredientAmount(8, 'gramme', 150, ingredients[8]),
+        createIngredientAmount(9, 'gramme', 70, ingredients[9]),
+        createIngredientAmount(10, 'gramme', 100, ingredients[10]),
+        createIngredientAmount(11, 'tablespoon', 1, ingredients[11]),
+        createIngredientAmount(12, 'gramme', 50, ingredients[12]),
+        createIngredientAmount(13, 'gramme', 2, ingredients[13]),
+        createIngredientAmount(14, 'gramme', 2, ingredients[14]),
+        createIngredientAmount(15, 'gramme', 250, ingredients[15]),
+        createIngredientAmount(16, 'gramme', 170, ingredients[16]),
+        createIngredientAmount(17, 'tablespoon', 1, ingredients[17]),
+        createIngredientAmount(18, 'tablespoon', 1, ingredients[18]),
+        createIngredientAmount(19, 'tablespoon', 1, ingredients[11]),
+        createIngredientAmount(20, 'piece', 1, ingredients[20]),
+        createIngredientAmount(21, 'gramme', 50, ingredients[21]),
         //pesto pasta //
-        createIngredientAmount(22, 'tablespoon', 2, ingredientAmounts[11]),//olive oil
-        createIngredientAmount(23, 'tablespoon', 2, ingredientAmounts[24]),//cheese parmeason
-        createIngredientAmount(24, 'gramme', 450, ingredientAmounts[22]),//pasta
-        createIngredientAmount(25, 'cup', 0.5, ingredientAmounts[2]),//onion
-        createIngredientAmount(26, 'tablespoon', 2.5, ingredientAmounts[23]),//pesto
-        createIngredientAmount(27, 'teaspoon', 0.5, ingredientAmounts[0]),//salt
-        createIngredientAmount(28, 'tablespoon', 2, ingredientAmounts[14]),//pepper
+        createIngredientAmount(22, 'tablespoon', 2, ingredients[11]),//olive oil
+        createIngredientAmount(23, 'tablespoon', 2, ingredients[24]),//cheese parmesan
+        createIngredientAmount(24, 'gramme', 450, ingredients[22]),//pasta
+        createIngredientAmount(25, 'cup', 0.5, ingredients[2]),//onion
+        createIngredientAmount(26, 'tablespoon', 2.5, ingredients[23]),//pesto
+        createIngredientAmount(27, 'teaspoon', 0.5, ingredients[0]),//salt
+        createIngredientAmount(28, 'tablespoon', 2, ingredients[14]),//pepper
         //salmon Honey//
-        createIngredientAmount(29, 'gramme', 250, ingredientAmounts[25]),//salmon
-        createIngredientAmount(30, 'tablespoon', 2, ingredientAmounts[26]),//honey
-        createIngredientAmount(31, 'tablespoon', 1, ingredientAmounts[27]),//soy sauce
-        createIngredientAmount(32, 'tablespoon', 1, ingredientAmounts[30]),//garlic
-        createIngredientAmount(33, 'teaspoon', 1, ingredientAmounts[28]),//chilli flakes
-        createIngredientAmount(34, 'gramme', 200, ingredientAmounts[6]),//rice
-        createIngredientAmount(35, 'gramme', 15, ingredientAmounts[29]),//Broccoli
+        createIngredientAmount(29, 'gramme', 250, ingredients[25]),//salmon
+        createIngredientAmount(30, 'tablespoon', 2, ingredients[26]),//honey
+        createIngredientAmount(31, 'tablespoon', 1, ingredients[27]),//soy sauce
+        createIngredientAmount(32, 'tablespoon', 1, ingredients[30]),//garlic
+        createIngredientAmount(33, 'teaspoon', 1, ingredients[28]),//chilli flakes
+        createIngredientAmount(34, 'gramme', 200, ingredients[6]),//rice
+        createIngredientAmount(35, 'gramme', 15, ingredients[29]),//Broccoli
         //fruit salad//
-        createIngredientAmount(36, 'cup', 1, ingredientAmounts[31]),//apple
-        createIngredientAmount(37, 'cup', 1, ingredientAmounts[32]),//grapes
-        createIngredientAmount(38, 'cup', 1, ingredientAmounts[33]),//banana
-        createIngredientAmount(39, 'tablespoon', 1, ingredientAmounts[34]),//lemon juice
-        createIngredientAmount(40, 'teaspoon', 1, ingredientAmounts[35]),//chia seeds
-        createIngredientAmount(41, 'cup', 1, ingredientAmounts[36]),//kiwi
-        createIngredientAmount(42, 'cup', 1, ingredientAmounts[37]),//Pomegranate
-        createIngredientAmount(43, 'tablespoon', 1, ingredientAmounts[26]),//honey
+        createIngredientAmount(36, 'cup', 1, ingredients[31]),//apple
+        createIngredientAmount(37, 'cup', 1, ingredients[32]),//grapes
+        createIngredientAmount(38, 'cup', 1, ingredients[33]),//banana
+        createIngredientAmount(39, 'tablespoon', 1, ingredients[34]),//lemon juice
+        createIngredientAmount(40, 'teaspoon', 1, ingredients[35]),//chia seeds
+        createIngredientAmount(41, 'cup', 1, ingredients[36]),//kiwi
+        createIngredientAmount(42, 'cup', 1, ingredients[37]),//Pomegranate
+        createIngredientAmount(43, 'tablespoon', 1, ingredients[26]),//honey
         // Shrimp rice//
-        createIngredientAmount(44, 'gramme', 200, ingredientAmounts[38]),//Shrimp
-        createIngredientAmount(45, 'tablespoon', 2, ingredientAmounts[39]),//Butter
-        createIngredientAmount(46, 'tablespoon', 1, ingredientAmounts[30]),//Garlic
-        createIngredientAmount(47, 'teaspoon', 1, ingredientAmounts[43]),//Paprika
-        createIngredientAmount(48, 'teaspoon', 1, ingredientAmounts[28]),//ChilliFlakes
-        createIngredientAmount(49, 'cup', 1, ingredientAmounts[6]),//Rice
-        createIngredientAmount(50, 'cup', 1, ingredientAmounts[32]),//Lemon
-        createIngredientAmount(51, 'gramme', 25, ingredientAmounts[42]),//Spring Onion
-        createIngredientAmount(52, 'teaspoon', 0.5, ingredientAmounts[0]),//Salt
-        createIngredientAmount(53, 'teaspoon', 0.5, ingredientAmounts[14]),//pepper
-
+        createIngredientAmount(44, 'gramme', 200, ingredients[38]),//Shrimp
+        createIngredientAmount(45, 'tablespoon', 2, ingredients[39]),//Butter
+        createIngredientAmount(46, 'tablespoon', 1, ingredients[30]),//Garlic
+        createIngredientAmount(47, 'teaspoon', 1, ingredients[43]),//Paprika
+        createIngredientAmount(48, 'teaspoon', 1, ingredients[28]),//ChilliFlakes
+        createIngredientAmount(49, 'cup', 1, ingredients[6]),//Rice
+        createIngredientAmount(50, 'cup', 1, ingredients[32]),//Lemon
+        createIngredientAmount(51, 'gramme', 25, ingredients[42]),//Spring Onion
+        createIngredientAmount(52, 'teaspoon', 0.5, ingredients[0]),//Salt
+        createIngredientAmount(53, 'teaspoon', 0.5, ingredients[14]),//pepper
+		
+		createIngredientAmount(54, 'gramme', 20, ingredients[44]),//Pistachio
+		createIngredientAmount(55, 'gramme', 200, ingredients[45])//Flour
     ]);
 
 }
@@ -348,7 +354,7 @@ async function createListOfRecipes() {
     await Promise.all([
         createRecipe(
             2,
-            "ChickPea&AvocadoSalad",
+            "ChickPeaAvocadoSalad",
             "A delicious healthy salad",
             chickpeaAndAvocadoSalad,
             chickpeaAndAvocadoSaladSteps,
@@ -358,7 +364,6 @@ async function createListOfRecipes() {
             chickpeaAndAvocadoSaladRecipeOwners
         )
     ]);
-
     //End Recipe 3
 
 

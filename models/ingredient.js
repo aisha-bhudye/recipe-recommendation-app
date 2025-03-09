@@ -8,7 +8,7 @@ const ingredientSchema = new Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Spice", "Allium", "Vegetable", "Dairy", "Fat", "Fruit", "Gluten", "Carbohydrate", "Chemical", "Fish", "Mammal", "Bird", "Egg", "Nut" ],
+    enum: ["Spice", "Allium", "Vegetable", "Dairy", "Fat", "Fruit", "Gluten", "Carbohydrate", "Chemical", "Fish", "Mammal", "Bird", "Egg", "Nut" , "Sauce"],
     default: "Mammal",
   }
 });

@@ -1,5 +1,5 @@
 // myself is required so that a one exported function can be used by another function from within the same js file
-const myself = require('./categorize-recipe.js');
+const myself = require('./categorize-recipe');
 
 // enum: ["Spice", "Allium", "Vegetable", "Dairy", "Fat", "Fruit", "Gluten", "Carbohydrate", "Chemical", "Fish", "Mammal", "Bird", "Egg" , "Nut"]
 // use module.exports so this function can be used from another js file

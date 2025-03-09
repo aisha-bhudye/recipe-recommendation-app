@@ -2,6 +2,7 @@ mixin thumbCard(recipe)
 	.col-md-4
 		.card.mb-4.shadow-sm
 			- var imagePath = `/images/${recipe.name}.png`
+			- var isVeg = recipe.isVegetarian
 			img(src=imagePath).bd-placeholder-img.card-img-top&attributes({"width": "100%"}, {"height": "225"}, {"focusable": "false"})
 			.card-body
 				.card-text #{recipe.description}
@@ -10,9 +11,5 @@ mixin thumbCard(recipe)
 				.d-flex.justify-content-between.align-items-center
 					.btn-group
 						button.btn.btn-sm.btn-outline-secondary
-							a(href=recipe.url) View
-						if recipe.isVegetarian
-							button.btn.btn-sm.btn-outline-secondary Veg
-						else
-							button.btn.btn-sm.btn-outline-secondary Non-Veg
+							a(href=recipe.url) View	details
 					small.text-muted #{recipe.preparationTime} mins
