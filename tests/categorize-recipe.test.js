@@ -1,3 +1,4 @@
+
 const Ingredient = require("../models/ingredient");;
 const IngredientAmount = require("../models/ingredientAmount");;
 const { isNutFree, isGlutenFree, isVegetarian, isVegan } = require("../logic/categorize-recipe");
