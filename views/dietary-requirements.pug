@@ -2,62 +2,65 @@ extends layout.pug
 
 block content
 	.container
-		.py-5.text-center
-			h2 Your dietary requirements
-			p
-				| Please tell us about your dietary requirements and we will list the recipes that are suitable for you.
-		form(method='POST').needs-validation
-			.row
-				.cold-md-8.order-md-1
-					.row
-						.col-md-6.md-3
-							label(for='firstName') First name 	
-							input#firstName.form-control(type='text', name='firstName', placeholder='First name', required)
-							.invalid-feedback
-								| Valid first name is required
-					hr
-					| Do you suffer from any form of gluten intolerance? 
-					.form-check.form-check-inline
-							input#glutenIntolerance1.form-check-input(type='radio', name='glutenIntolerance', value='true')
-							label.form-check-input(for='glutenIntolerance1') Yes
-					.form-check.form-check-inline
-							input#glutenIntolerance2.form-check-input(type='radio', name='glutenIntolerance', value='false')
-							label.form-check-input(for='glutenIntolerance2') No
-					.form-check.form-check-inline
-							input#glutenIntolerance3.form-check-input(type='radio', name='glutenIntolerance', value='dontmind' checked)
-							label.form-check-input(for='glutenIntolerance3') Don't mind
-					hr
-					| Do you suffer from any form of nut allergy? 
-					.form-check.form-check-inline
-							input#nutAllergy1.form-check-input(type='radio', name='nutAllergy', value='true')
-							label.form-check-input(for='nutAllergy1') Yes
-					.form-check.form-check-inline
-							input#nutAllergy2.form-check-input(type='radio', name='nutAllergy', value='false')
-							label.form-check-input(for='nutAllergy2') No
-					.form-check.form-check-inline
-							input#nutAllergy3.form-check-input(type='radio', name='nutAllergy', value='dontmind' checked)
-							label.form-check-input(for='nutAllergy3') Don't mind
-					hr
-					| Are you vegetarian? 
-					.form-check.form-check-inline
-							input#vegetarian1.form-check-input(type='radio', name='vegetarian', value='true')
-							label.form-check-input(for='vegetarian1') Yes
-					.form-check.form-check-inline
-							input#vegetarian2.form-check-input(type='radio', name='vegetarian', value='false')
-							label.form-check-input(for='vegetarian2') No
-					.form-check.form-check-inline
-							input#vegetarian3.form-check-input(type='radio', name='vegetarian', value='dontmind' checked)
-							label.form-check-input(for='vegetarian3') Don't mind
-					hr
-					| Are you vegan? 
-					.form-check.form-check-inline
-							input#vegan1.form-check-input(type='radio', name='vegan', value='true')
-							label.form-check-input(for='vegan1') Yes
-					.form-check.form-check-inline
-							input#vegan2.form-check-input(type='radio', name='vegan', value='false')
-							label.form-check-input(for='vegan2') No
-					.form-check.form-check-inline
-							input#vegan3.form-check-input(type='radio', name='vegan', value='dontmind' checked)
-							label.form-check-input(for='vegan3') Don't mind
-			.row
-				button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit your details
+		.row.justify-content-center
+			.col-12.col-md-10
+				.card.shadow-lg.p-4
+					.card-body.text-center.py-5
+						h2 Your dietary requirements
+						p
+							| Please tell us about your dietary requirements and we will list the recipes that are suitable for you.
+					form(method='POST').needs-validation
+						.row.justify-content-center
+							.col-md-8.order-md-1.text-left
+								.row.justify-content-center
+									.col-md-6.md-3.mb-4.text-center
+										label(for='firstName') First name 	
+										input#firstName.form-control(type='text', name='firstName', placeholder='First name', required)
+										.invalid-feedback
+											| Valid first name is required
+
+								hr
+								.form-group.d-flex.justify-content-between.align-items-center
+									| Do you suffer from any form of gluten intolerance?
+						
+									.form-check.d-flex.align-items-center.mr-3.ml-auto
+											input#glutenIntolerance1.form-check-input(type='radio', name='glutenIntolerance', value='true')
+											label.form-check-label(for='glutenIntolerance1') Yes
+									.form-check.d-flex.align-items-center
+											input#glutenIntolerance2.form-check-input(type='radio', name='glutenIntolerance', value='false')
+											label.form-check-label(for='glutenIntolerance2') No
+
+								hr
+								.form-group.d-flex.justify-content-between.align-items-center
+									| Do you suffer from any form of nut allergy? 
+
+									.form-check.d-flex.align-items-center.mr-3.ml-auto
+											input#nutAllergy1.form-check-input(type='radio', name='nutAllergy', value='true')
+											label.form-check-label(for='nutAllergy1') Yes
+									.form-check.d-flex.align-items-center
+											input#nutAllergy2.form-check-input(type='radio', name='nutAllergy', value='false')
+											label.form-check-label(for='nutAllergy2') No
+
+								hr
+								.form-group.d-flex.justify-content-between.align-items-center
+									| Are you vegetarian? 
+									.form-check.d-flex.align-items-center.mr-3.ml-auto
+											input#vegetarian1.form-check-input(type='radio', name='vegetarian', value='true')
+											label.form-check-label(for='vegetarian1') Yes
+									.form-check.d-flex.align-items-center
+											input#vegetarian2.form-check-input(type='radio', name='vegetarian', value='false')
+											label.form-check-label(for='vegetarian2') No
+
+								hr
+								.form-group.d-flex.justify-content-between.align-items-center.mb-5
+									| Are you vegan? 
+									.form-check.d-flex.align-items-center.mr-3.ml-auto
+											input#vegan1.form-check-input(type='radio', name='vegan', value='true')
+											label.form-check-label(for='vegan1') Yes
+									.form-check.d-flex.align-items-center
+											input#vegan2.form-check-input(type='radio', name='vegan', value='false')
+											label.form-check-label(for='vegan2') No
+
+						.row.justify-content-center
+							.col-md-10.text-center
+								button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit your details
