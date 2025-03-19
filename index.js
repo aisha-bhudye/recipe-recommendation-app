@@ -86,16 +86,16 @@ app.post("/dietary-requirements", async (req, res, next) => {
 	const firstName = req.body.firstName;
 
 	let queryCriteria = {}; //Start off with none of dietary requirement set i.e. not set to either true or false
-	if (req.body.glutenIntolerance != "dontmind"){
+	if (req.body.glutenIntolerance){
 		queryCriteria.isGlutenFree = req.body.glutenIntolerance;
 	}
-	if (req.body.nutAllergy  != "dontmind"){
+	if (req.body.nutAllergy){
 		queryCriteria.isNutFree =  req.body.nutAllergy;
 	}
-	if (req.body.vegetarian  != "dontmind"){
+	if (req.body.vegetarian){
 		queryCriteria.isVegetarian = req.body.vegetarian;
 	}
-	if (req.body.vegan  != "dontmind"){
+	if (req.body.vegan){
 		queryCriteria.isVegan = req.body.vegan;
 	}
 
