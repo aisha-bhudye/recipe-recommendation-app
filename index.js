@@ -86,18 +86,27 @@ app.post("/dietary-requirements", async (req, res, next) => {
 	const firstName = req.body.firstName;
 
 	let queryCriteria = {}; //Start off with none of dietary requirement set i.e. not set to either true or false
-	if (req.body.glutenIntolerance){
-		queryCriteria.isGlutenFree = req.body.glutenIntolerance;
-	}
-	if (req.body.nutAllergy){
-		queryCriteria.isNutFree =  req.body.nutAllergy;
-	}
-	if (req.body.vegetarian){
-		queryCriteria.isVegetarian = req.body.vegetarian;
-	}
-	if (req.body.vegan){
-		queryCriteria.isVegan = req.body.vegan;
-	}
+    if (req.body.glutenIntolerance === "true"){
+        queryCriteria.isGlutenFree = req.body.glutenIntolerance;
+    }else if (req.body.glutenIntolerance === "false"){
+        queryCriteria.isGlutenFree = {$in: [true,false]};
+    }
+    if (req.body.nutAllergy === "true"){
+        queryCriteria.isNutFree =  req.body.nutAllergy;
+    }else if (req.body.nutAllergy === "false"){
+        queryCriteria.isNutFree = {$in: [true,false]};
+    }
+    if (req.body.vegetarian === "true"){
+        queryCriteria.isVegetarian = req.body.vegetarian;
+    }else if (req.body.vegetarian === "false"){
+        queryCriteria.isVegetarian = {$in: [true,false]};
+    }
+    if (req.body.vegan === "true"){
+        queryCriteria.isVegan = req.body.vegan;
+    }else if (req.body.vegan === "false"){
+        queryCriteria.isVegan = {$in: [true,false]};
+    }
+
 
 	const suitableRecipes = await Recipe.find(queryCriteria,
 		"name description ingredientAmounts serves preparationTime origin isGlutenFree isNutFree isVegan isVegetarian")
