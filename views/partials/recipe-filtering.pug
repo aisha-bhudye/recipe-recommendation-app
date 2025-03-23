@@ -1,0 +1,22 @@
+//- Button to toggle filter menu
+button(onclick="toggleFilters()") Show Cuisine Filters
+
+//- Hidden filter menu
+div#filterMenu(style="display: none; border: 1px solid #ccc; padding: 10px; width: 300px; background: white; position: absolute; z-index: 100;")
+    form(action="/" method="GET" id="filterForm")
+    label(for="cuisineFilter") Select Cuisine:
+    select(name="cuisine" id="cuisineFilter")
+        option(value="" selected=(selectedCuisine === "")) -- All Cuisines --
+        option(value="Mediterranean" selected=(selectedCuisine === "Mediterranean")) Mediterranean
+        option(value="Indian" selected=(selectedCuisine === "Indian")) Indian
+        option(value="British" selected=(selectedCuisine === "British")) British
+        option(value="Italian" selected=(selectedCuisine === "Italian")) Italian
+        option(value="Chinese" selected=(selectedCuisine === "Chinese")) Chinese
+    br
+    button(type="submit" onclick="applyFilter()") Apply Filter
+    button(type="button" onclick="toggleFilters()") Close
+
+
+
+
+script(src="/js/filters.js", defer)

@@ -27,28 +27,56 @@ async function main() {
 	await mongoose.connect(mongoDB);
 }
 
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "pug");
-
-app.get("/", async (req, res) => {
-	//When a request comes in at /, retrieve all the recipes from MongoDB via mongoose and then hand over to index.pug for rendering
-	const allRecipes = await Recipe.find({}, 
-		"name description ingredientAmounts serves preparationTime origin isGlutenFree isNutFree isVegan isVegetarian")
-		.sort({ name: 1 })
-		.populate({
-			path: 'ingredientAmounts',
-			populate: {
-				path: 'ingredient',
-				model: 'Ingredient'
-			}
-		})
-		.exec();
-
-	res.render("index", {
-		recipes: allRecipes
-	});
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
 });
+
+
+//getting the recipes to display to the user 
+app.get("/", async (req, res) => {
+    console.log("Received request to / with query:", req.query);
+
+    let queryCriteria = {};  
+
+    // Check if a cuisine filter is provided in the query params
+    if (req.query.cuisine && req.query.cuisine !== "") {
+        queryCriteria.origin = req.query.cuisine;
+        console.log("Filtering by cuisine:", req.query.cuisine);
+    }
+
+    try {
+        // Fetch recipes based on filter criteria
+        const recipes = await Recipe.find(queryCriteria,
+            "name description ingredientAmounts serves preparationTime origin isGlutenFree isNutFree isVegan isVegetarian"
+        )
+        .sort({ name: 1 })
+        .populate({
+            path: 'ingredientAmounts',
+            populate: {
+                path: 'ingredient',
+                model: 'Ingredient'
+            }
+        })
+        .exec();
+
+        console.log("Recipes found:", recipes.length);
+
+        res.render("index", {
+            recipes: recipes,
+            selectedCuisine: req.query.cuisine || "" // Pass selected cuisine back to the template
+        });
+    } catch (err) {
+        console.error("Error fetching recipes:", err);
+        res.status(500).send("Error retrieving recipes.");
+    }
+});
+
 
 app.get("/recipe/:id", async (req, res, next) => {
 	//When a request comes in at /recipe/:id where id is the MongoDB id of the recipe object, retrieve recipe that matches this id from MongoDB via mongoose 
@@ -126,6 +154,7 @@ app.post("/dietary-requirements", async (req, res, next) => {
 	});
 
 });
+  
 
 const PORT = 3000;
 app.listen(PORT, () => {
