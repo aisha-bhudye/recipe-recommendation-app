@@ -7,10 +7,10 @@ To get this project up and running locally on your computer:
    npm install
 
 3. Run the tutorial server, using the appropriate command line shell for your environment:
-   Linux terminal
+   # Linux terminal
 DEBUG=express-locallibrary-tutorial:* npm run devstart
 
-   Windows Powershell
+   # Windows Powershell
 $ENV:DEBUG = "express-locallibrary-tutorial:*"; npm start
 
 4. Open a browser and type localhost:3000 to open the recipe site
