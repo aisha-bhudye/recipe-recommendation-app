@@ -393,7 +393,7 @@ async function createListOfRecipes() {
             sweetPotatoandBlackBeanTacosSteps,
             5,
             30,
-            "British",
+            "Latino",
             sweetPotatoandBlackBeanTacosRecipeOwners)
     ]);
     //end recipe 4
